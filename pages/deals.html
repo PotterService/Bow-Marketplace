@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Featured Deals | Bow Service Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .deal-tools{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0;align-items:center}
+    .deal-pill{border:1px solid rgba(255,119,255,.35);border-radius:999px;padding:8px 12px;background:#fff;color:#24102d;font-weight:800}
+    .deal-note{background:#fff7ff;border:1px solid rgba(255,119,255,.25);border-radius:16px;padding:14px;margin:16px 0;color:#35113e}
+    .bow-deal-card{position:relative}
+    .bow-deal-ribbon{position:absolute;top:14px;left:14px;background:#ff77ff;color:#111;padding:8px 13px;border-radius:999px;font-weight:900;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.18);z-index:5}
+    .bow-ic-pill{display:block;background:#f3eaff;color:#381052;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:900;margin:10px 0}
+    .bow-price-line{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:12px 0}
+    .bow-price-line strong{font-size:26px}
+    .bow-value{font-size:14px;color:#777;line-height:1.05}
+    .bow-value span{text-decoration:line-through;display:block}
+    .bow-discount-bar{background:#ffe1fb;color:#a00098;border-radius:999px;padding:6px 10px;font-weight:900;font-size:13px;margin:8px 0}
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <header class="site-header">
+    <div class="header-top">
+      <button class="menu-btn" id="mobileMenuBtn">☰</button>
+      <a class="brand" href="../index.html"><span class="brand-mark">B</span><span><strong>Bow Service Marketplace</strong><small>Private Finds • Local Deals • Collectibles</small></span></a>
+      <div class="header-actions"><a class="header-action link-action" href="wishlist.html">♡ Wishlist</a><a class="header-action link-action" href="cart.html">🛒 Cart</a><a class="header-action link-action" href="login.html">Login</a></div>
+    </div>
+    <nav class="nav-bar" id="navBar"><a href="../index.html">Home</a><a href="deals.html">Featured Deals</a><a href="new-arrivals.html">New Arrivals</a><a href="categories.html">Categories</a><a href="wishlist.html">Wishlist</a><a href="cart.html">Cart</a><a href="contact.html">Contact</a><a href="terms.html">Terms</a></nav>
+  </header>
+  <main class="simple-page">
+    <section class="admin-hero">
+      <p class="eyebrow">Featured Deals</p>
+      <h1>Deals & Highlights</h1>
+      <p>Browse discounted Bow Service Marketplace listings, sorted with the biggest discounts first.</p>
+      <div class="deal-tools"><span class="deal-pill" id="dealsCount">Loading...</span><a class="secondary-btn small-btn" href="new-arrivals.html">See New Arrivals</a><a class="secondary-btn small-btn" href="categories.html">Browse Categories</a></div>
+    </section>
+    <section class="deal-note"><strong>How this page works:</strong> it shows discounted listings first, with larger discounts at the top.</section>
+    <section id="dealsGrid" class="product-grid"></section>
+  </main>
+  <footer><strong>Bow Service Marketplace</strong><p>Private marketplace listings by Bow Service. Not affiliated with Amazon, eBay, Google, or any outside marketplace.</p></footer>
+  <script src="../config.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/store.js"></script>
+  <script src="../js/shared-pages.js"></script>
+  <script src="../js/pages.js"></script>
+  <script src="../js/deals.js"></script>
+</body>
+</html>

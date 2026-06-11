@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Read Me | Bow Service Marketplace PUBLIC</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="readme-page">
+  <main class="readme">
+    <h1>Bow Service Marketplace PUBLIC</h1>
+    <p>This is a full private sales storefront that loads inventory from your Google Sheet.</p>
+
+    <h2>What is included</h2>
+    <ul>
+      <li>Marketplace-style storefront</li>
+      <li>Google Sheets inventory loading</li>
+      <li>Search, category filters with adult age confirmation, status filters, sorting, and max price filter</li>
+      <li>Featured deals section</li>
+      <li>Product detail modal with image gallery</li>
+      <li>Cart stored locally in the visitor's browser</li>
+      <li>Wishlist stored locally in the visitor's browser</li>
+            <li>Mobile-friendly layout</li>
+      <li>Amazon/eBay external link buttons when your sheet includes links</li>
+    </ul>
+
+    <h2>Your Google Sheet</h2>
+    <p>The included config file already uses this Sheet ID:</p>
+    <pre>1U9WIQvFk4uh7jxTdREpMRE4OVuHxTW4EunUnd_xMCYk</pre>
+
+    <h2>Required sheet columns</h2>
+    <pre>Item ID
+Item Name
+Category
+Item Value
+Description
+Sale Price
+Internal Code
+Available
+Image URLs
+Amazon Link
+Date Added
+Last Updated
+Notes
+Discount
+On Ebay
+Ebay Link
+Az</pre>
+
+    <h2>Image URLs</h2>
+    <p>You can put one image URL or multiple image URLs in the Image URLs column. Separate multiple images with commas, semicolons, or line breaks.</p>
+
+    <h2>How to change the Google Sheet</h2>
+    <ol>
+      <li>Open <strong>config.js</strong>.</li>
+      <li>Change <strong>sheetId</strong>.</li>
+      <li>Change <strong>sheetName</strong> if your tab is not named Inventory.</li>
+    </ol>
+
+    <h2>Important note</h2>
+    <p>This project is original and legally distinct. It is not affiliated with Amazon, eBay, or Google. Do not use Amazon's name, logos, or copied website assets.</p>
+
+    <p><a class="primary-btn" href="index.html">Open Storefront</a></p>
+  </main>
+</body>
+</html>
+
+
+V2 updates:
+- Browse Categories showcase removed from public page.
+- Sold items are hidden by default unless the visitor checks See sold items.
+- Adult category requires an 18+ confirmation before showing listings.

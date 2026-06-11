@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart | Bow Service Marketplace</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+  <style>
+    .cart-disclaimer {
+      background: #fff7e6;
+      border: 1px solid #ffd27a;
+      color: #4a3000;
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin: 18px 0;
+      line-height: 1.45;
+      box-shadow: 0 4px 18px rgba(0,0,0,.04);
+    }
+    .cart-contact-form {
+      background: #fff;
+      border-radius: 18px;
+      padding: 16px;
+      margin-top: 16px;
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 8px 28px rgba(0,0,0,.06);
+    }
+    .cart-contact-form h2 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+    }
+    .cart-contact-form p {
+      margin: 0 0 12px;
+      color: #666;
+      font-size: .94rem;
+    }
+    .cart-form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .cart-form-field.full {
+      grid-column: 1 / -1;
+    }
+    .cart-form-field label,
+    .cart-choice-block strong {
+      display: block;
+      font-weight: 800;
+      font-size: .86rem;
+      margin-bottom: 5px;
+      color: #24102d;
+    }
+    .cart-form-field input,
+    .cart-form-field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(0,0,0,.16);
+      border-radius: 10px;
+      padding: 10px;
+      font: inherit;
+      background: #fff;
+    }
+    .cart-form-field textarea {
+      min-height: 74px;
+      resize: vertical;
+    }
+    .cart-choice-block {
+      grid-column: 1 / -1;
+      background: #faf7ff;
+      border: 1px solid rgba(255,119,255,.25);
+      padding: 12px;
+      border-radius: 14px;
+    }
+    .cart-choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+    .cart-choice-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 700;
+      color: #35113e;
+    }
+    .cart-summary .primary-btn.full {
+      width: 100%;
+      margin-top: 10px;
+    }
+    #cartRequestStatus {
+      margin-top: 8px;
+      font-size: .88rem;
+      color: #8a0b0b;
+      min-height: 20px;
+    }
+    .mailto-note {
+      display: block;
+      margin-top: 8px;
+      color: #666;
+    }
+    @media (max-width: 760px) {
+      .cart-form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="toast" class="toast"></div>
+<header class="site-header">
+  <div class="header-top">
+    <button class="menu-btn" id="mobileMenuBtn">☰</button>
+    <a class="brand" href="../index.html"><span class="brand-mark">B</span><span><strong>Bow Service Marketplace</strong><small>Private Finds • Local Deals • Collectibles</small></span></a>
+    <div class="header-actions"><a class="header-action link-action" href="wishlist.html">♡ Wishlist</a><a class="header-action link-action" href="cart.html">🛒 Cart</a><a class="header-action link-action" href="login.html">Login</a></div>
+  </div>
+  <nav class="nav-bar" id="navBar"><a href="../index.html">Home</a><a href="deals.html">Featured Deals</a><a href="new-arrivals.html">New Arrivals</a><a href="categories.html">Categories</a><a href="wishlist.html">Wishlist</a><a href="cart.html">Cart</a><a href="contact.html">Contact</a><a href="terms.html">Terms</a></nav>
+</header>
+<main class="simple-page">
+  <section class="admin-hero">
+    <p class="eyebrow">Cart</p>
+    <h1>Your Interest Cart</h1>
+    <p>This cart helps you collect items before contacting Bow Service. Payment is not processed on this site.</p>
+  </section>
+
+  <section class="cart-disclaimer">
+    <strong>Important inventory notice:</strong> Inventory is updated manually, so items may already be sold, held by prior pending orders, or not yet updated on the inventory sheet. Bow Service will confirm final availability before completing any request.
+  </section>
+
+  <section class="cart-page">
+    <div id="cartList"></div>
+    <aside class="cart-summary">
+      <h2>Estimated Total</h2>
+      <strong id="cartTotalPage">$0.00</strong>
+      <small>Final price and availability are confirmed by Bow Service.</small>
+    </aside>
+  </section>
+
+  <section class="cart-contact-form" aria-labelledby="requestInfoHeading">
+    <h2 id="requestInfoHeading">Request These Items</h2>
+    <p>Fill this out so Bow Service has everything needed to review your cart request.</p>
+    <div class="cart-form-grid">
+      <div class="cart-form-field">
+        <label for="customerName">Name *</label>
+        <input id="customerName" type="text" autocomplete="name" required>
+      </div>
+      <div class="cart-form-field">
+        <label for="customerPhone">Phone Number *</label>
+        <input id="customerPhone" type="tel" autocomplete="tel" required>
+      </div>
+      <div class="cart-form-field full">
+        <label for="customerEmail">Email *</label>
+        <input id="customerEmail" type="email" autocomplete="email" required>
+      </div>
+
+      <div class="cart-choice-block">
+        <strong>Request Type *</strong>
+        <div class="cart-choice-row">
+          <label><input type="radio" name="fulfillmentType" value="Local Pickup"> Local Pickup</label>
+          <label><input type="radio" name="fulfillmentType" value="Local Delivery"> Local Delivery to my house</label>
+          <label><input type="radio" name="fulfillmentType" value="Ship to me"> Ship to me</label>
+        </div>
+      </div>
+
+      <div class="cart-choice-block" style="background:#fff7e6;border-color:#ffd27a;color:#4a3000;">
+        <strong>Delivery / Shipping Notice</strong>
+        <div style="font-size:.92rem;line-height:1.4;">Local delivery and shipping charges are billed separately when applicable. Bow Service will confirm the final amount before completing the request.</div>
+      </div>
+
+      <div class="cart-form-field full" id="addressBlock">
+        <label for="customerAddress">Address for Local Delivery or Shipping</label>
+        <textarea id="customerAddress" autocomplete="street-address" placeholder="Street address, city, state, ZIP"></textarea>
+      </div>
+
+      <div class="cart-choice-block">
+        <div class="cart-choice-row">
+          <label><input id="provideAddressLater" type="checkbox"> I will provide my address later</label>
+        </div>
+      </div>
+
+      <div class="cart-form-field full">
+        <label for="customerNotes">Extra Notes</label>
+        <textarea id="customerNotes" placeholder="Pickup/delivery notes, preferred contact time, questions, etc."></textarea>
+      </div>
+    </div>
+
+    <button id="contactSellerBtn" class="primary-btn full" type="button">Contact Bow Service</button>
+    <div id="cartRequestStatus" role="status"></div>
+    <small class="mailto-note">This button opens your email app with the request prepared for Bow@potterservice.com. Local delivery and shipping charges are billed separately when applicable.</small>
+  </section>
+</main>
+<footer><strong>Bow Service Marketplace</strong><p>Private marketplace listings by Bow Service. Not affiliated with Amazon, eBay, Google, or any outside marketplace.</p></footer>
+<script src="../config.js"></script>
+<script src="../js/utils.js"></script>
+<script src="../js/store.js"></script>
+<script src="../js/shared-pages.js"></script>
+<script src="../js/pages.js"></script>
+<script src="../js/cart.js"></script>
+<script>
+(function(){
+  const BOW_EMAIL = "Bow@potterservice.com";
+  const STATUS_ID = "cartRequestStatus";
+
+  function moneyFromText(text){
+    const match = String(text || "").match(/\$?\s*([0-9]+(?:\.[0-9]{1,2})?)/);
+    return match ? Number(match[1]) : 0;
+  }
+
+  function clean(text){
+    return String(text || "").replace(/\s+/g," ").trim();
+  }
+
+  function findIC(text){
+    const raw = String(text || "");
+    const patterns = [
+      /\bIC\s*(?:#|Number|No\.?|Code)?\s*[:\-]?\s*([A-Za-z0-9\-_.]+)/i,
+      /\bInternal\s*Code\s*[:\-]?\s*([A-Za-z0-9\-_.]+)/i
+    ];
+    for (const p of patterns) {
+      const m = raw.match(p);
+      if (m && m[1]) return m[1].replace(/[,.]+$/g,"");
+    }
+    return "";
+  }
+
+  function getCartFromDom(){
+    const rows = Array.from(document.querySelectorAll("#cartList > *"));
+    return rows.map((row, index) => {
+      const text = clean(row.innerText);
+      const titleEl = row.querySelector("h1,h2,h3,h4,strong,.product-title,.cart-title,.item-title,a");
+      const title = clean(titleEl ? titleEl.innerText : text.split("\n")[0]) || `Item ${index + 1}`;
+      const ic = findIC(text);
+      const link = row.querySelector('a[href*="item"], a[href*="amazon"], a[href]')?.href || "";
+      const priceText = row.querySelector(".price,.sale-price,.item-price,.cart-price")?.innerText || text;
+      const price = moneyFromText(priceText);
+      return { title, ic, price, qty: 1, link };
+    }).filter(item => item.title && item.title !== "Item 1");
+  }
+
+  function safeParse(value){
+    try { return JSON.parse(value); } catch { return null; }
+  }
+
+  function getCartFromStorage(){
+    const items = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!/cart/i.test(key)) continue;
+      const data = safeParse(localStorage.getItem(key));
+      const arr = Array.isArray(data) ? data : data && typeof data === "object" ? Object.values(data) : [];
+      arr.forEach((entry, index) => {
+        if (!entry || typeof entry !== "object") return;
+        const title = entry["Item Name"] || entry.itemName || entry.name || entry.title || entry.productName || `Item ${index + 1}`;
+        const ic = entry["Internal Code"] || entry.internalCode || entry.ic || entry.IC || entry.code || "";
+        const price = entry["Sale Price"] || entry.salePrice || entry.price || entry.amount || entry["Item Value"] || "";
+        const qty = entry.qty || entry.quantity || 1;
+        const link = entry.link || entry.url || entry["Amazon Link"] || "";
+        items.push({ title: clean(title), ic: clean(ic), price: moneyFromText(price), qty, link });
+      });
+    }
+    return items.filter(item => item.title);
+  }
+
+  function getCartItems(){
+    const domItems = getCartFromDom();
+    if (domItems.length) return domItems;
+    return getCartFromStorage();
+  }
+
+  function getSelectedFulfillment(){
+    return document.querySelector('input[name="fulfillmentType"]:checked')?.value || "";
+  }
+
+  function getTotalText(){
+    return clean(document.getElementById("cartTotalPage")?.innerText) || "$0.00";
+  }
+
+  function showStatus(msg){
+    const el = document.getElementById(STATUS_ID);
+    if (el) el.innerText = msg;
+  }
+
+  function validateForm(){
+    const name = clean(document.getElementById("customerName")?.value);
+    const phone = clean(document.getElementById("customerPhone")?.value);
+    const email = clean(document.getElementById("customerEmail")?.value);
+    const type = getSelectedFulfillment();
+    const address = clean(document.getElementById("customerAddress")?.value);
+    const provideLater = document.getElementById("provideAddressLater")?.checked;
+
+    if (!name) return "Please enter your name.";
+    if (!phone) return "Please enter your phone number.";
+    if (!email) return "Please enter your email.";
+    if (!type) return "Please choose Local Pickup, Local Delivery, or Ship to me.";
+    if ((type === "Local Delivery" || type === "Ship to me") && !address && !provideLater) return "Please enter your address or check provide later.";
+    return "";
+  }
+
+  function buildEmailBody(){
+    const name = clean(document.getElementById("customerName")?.value);
+    const phone = clean(document.getElementById("customerPhone")?.value);
+    const email = clean(document.getElementById("customerEmail")?.value);
+    const type = getSelectedFulfillment();
+    const address = clean(document.getElementById("customerAddress")?.value);
+    const provideLater = document.getElementById("provideAddressLater")?.checked;
+    const notes = clean(document.getElementById("customerNotes")?.value);
+    const items = getCartItems();
+    const icList = items.map(x => x.ic).filter(Boolean);
+
+    const lines = [];
+    lines.push("Bow Service Marketplace Cart Request");
+    lines.push("");
+    lines.push("IMPORTANT INVENTORY NOTICE:");
+    lines.push("Inventory is updated manually, so items may already be sold, held by prior pending orders, or not yet updated on the inventory sheet. Please confirm final availability.");
+    lines.push("Local delivery and shipping charges are billed separately when applicable.");
+    lines.push("");
+    lines.push("CUSTOMER INFORMATION");
+    lines.push(`Name: ${name}`);
+    lines.push(`Phone: ${phone}`);
+    lines.push(`Email: ${email}`);
+    lines.push(`Request Type: ${type}`);
+    lines.push("Delivery/Shipping Charges: Billed separately when applicable");
+    lines.push(`Address: ${address || (provideLater ? "Customer will provide later" : "")}`);
+    if (notes) lines.push(`Notes: ${notes}`);
+    lines.push("");
+    lines.push("CART ITEMS");
+
+    if (!items.length) {
+      lines.push("No cart items were detected. Customer may need to describe requested items manually.");
+    } else {
+      items.forEach((item, i) => {
+        lines.push(`${i + 1}. ${item.title}`);
+        lines.push(`   IC: ${item.ic || "Not listed"}`);
+        lines.push(`   Qty: ${item.qty || 1}`);
+        lines.push(`   Amount: ${item.price ? "$" + item.price.toFixed(2) : "Not listed"}`);
+        if (item.link) lines.push(`   Link: ${item.link}`);
+      });
+    }
+
+    lines.push("");
+    lines.push(`Estimated Total: ${getTotalText()}`);
+    lines.push("");
+    lines.push("IC NUMBERS FOR QUICK INVENTORY SEARCH:");
+    lines.push(icList.length ? icList.join(",") : "No IC numbers detected");
+    lines.push("");
+    lines.push("Sent from PotterService.com / Bow Service Marketplace cart.");
+
+    return lines.join("\n");
+  }
+
+  function openEmail(){
+    const error = validateForm();
+    if (error) {
+      showStatus(error);
+      return;
+    }
+    const subject = "Bow Service Marketplace Cart Request";
+    const body = buildEmailBody();
+    const mailto = `mailto:${encodeURIComponent(BOW_EMAIL)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+    if (mailto.length > 1800) {
+      navigator.clipboard?.writeText(body).then(() => {
+        showStatus("The cart request was copied because it may be too long for email links. Paste it into an email to Bow@potterservice.com.");
+      }).catch(() => {
+        showStatus("The request is long. Please copy the generated information manually and email Bow@potterservice.com.");
+      });
+      window.location.href = `mailto:${BOW_EMAIL}?subject=${encodeURIComponent(subject)}`;
+      return;
+    }
+
+    showStatus("Opening your email app...");
+    window.location.href = mailto;
+  }
+
+  function syncAddressState(){
+    const type = getSelectedFulfillment();
+    const provideLater = document.getElementById("provideAddressLater")?.checked;
+    const address = document.getElementById("customerAddress");
+    if (!address) return;
+    address.disabled = !!provideLater || type === "Local Pickup";
+    if (type === "Local Pickup") address.placeholder = "Address not needed for local pickup";
+    else if (type === "Ship to me") address.placeholder = "Shipping address: street address, city, state, ZIP";
+    else address.placeholder = "Delivery address: street address, city, state, ZIP";
+  }
+
+  function init(){
+    document.querySelectorAll('input[name="fulfillmentType"], #provideAddressLater').forEach(el => el.addEventListener("change", syncAddressState));
+    const btn = document.getElementById("contactSellerBtn");
+    if (btn) btn.addEventListener("click", openEmail);
+    syncAddressState();
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+})();
+</script>
+</body>
+</html>

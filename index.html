@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bow Service Marketplace</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+
+  <style>
+    .deal-strip{background:linear-gradient(135deg,#fff3ff,#ffffff);border:2px solid rgba(255,119,255,.35);border-radius:24px;padding:18px;box-shadow:0 10px 30px rgba(53,17,62,.12);margin-bottom:24px;}
+    .deal-strip .section-title{background:#35113e;color:#fff;border-radius:18px;padding:14px 16px;margin-bottom:16px;}
+    .deal-strip .section-title .eyebrow{color:#ffb3ff;}
+    .deal-strip .section-title h2{color:#fff;margin:0;}
+    .deal-strip .small-btn{background:#fff;color:#35113e;border-color:#fff;font-weight:900;}
+    .deal-rail{background:#fff;border-radius:18px;padding:12px;}
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast" aria-live="polite"></div>
+  <header class="site-header">
+    <div class="header-top">
+      <button class="menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+      <a class="brand" href="index.html"><span class="brand-mark">B</span><span><strong id="storeName">Bow Service Marketplace</strong><small>Private Finds • Local Deals • Collectibles</small></span></a>
+      <div class="search-box">
+        <select id="categorySearchSelect"><option value="">All</option></select>
+        <input id="globalSearch" type="search" placeholder="Search Bow Service Marketplace..." />
+        <button id="searchBtn">Search</button>
+      </div>
+      <div class="header-actions">
+        <a class="header-action link-action" href="pages/wishlist.html">♡ Wishlist</a>
+        <a class="header-action link-action" href="pages/cart.html">🛒 Cart</a>
+        <a class="header-action link-action" href="pages/login.html">Login</a>
+      </div>
+    </div>
+    <nav class="nav-bar" id="navBar">
+      <a href="index.html">Home</a>
+      <a href="pages/deals.html">Featured Deals</a>
+      <a href="pages/categories.html">Categories</a>
+      <a href="#products">Shop Items</a>
+      <a href="pages/wishlist.html">Wishlist</a>
+      <a href="pages/cart.html">Cart</a>
+      <a href="pages/contact.html">Contact</a>
+      <a href="pages/terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="eyebrow">Bow Service Marketplace</p>
+      <h1>Shop private finds, collectibles, deals, and local sale items.</h1>
+      <p id="storeSubtitle">Browse Bow Service items, view details, save favorites, and build a cart before contacting the seller.</p>
+      <div class="hero-actions"><button class="primary-btn" id="browseMarketplaceBtn" type="button">Browse Marketplace</button><a class="secondary-btn" href="pages/deals.html">Featured Deals</a><a class="secondary-btn" href="pages/new-arrivals.html">See New Arrivals</a></div>
+    </div>
+    <div class="hero-card">
+      <strong>Marketplace Status</strong><p id="sheetStatus">Loading current listings...</p>
+      <div class="mini-stats"><span><b id="statTotal">0</b>Listings</span><span><b id="statAvailable">0</b>Available</span><span><b id="statDeals">0</b>Deals</span></div>
+    </div>
+  </section>
+
+  <section class="trust-row">
+    <div><strong>Easy Browsing</strong><span>Search, sort, and filter listings fast.</span></div>
+    <div><strong>Item Pages</strong><span>Each listing opens its own detail page.</span></div>
+    <div><strong>Private Cart</strong><span>Build a cart before contacting Bow Service.</span></div>
+    <div><strong>Sold Items Hidden</strong><span>Sold items stay hidden unless you choose to see them.</span></div>
+  </section>
+
+  <main class="layout">
+    <aside class="filters">
+      <div class="filter-head"><h2>Shop Filters</h2><button id="clearFilters">Clear</button></div>
+      <label>Category</label><select id="categoryFilter"><option value="">All categories</option></select>
+      <label class="checkline sold-toggle"><input id="showSoldFilter" type="checkbox" /> See sold items</label>
+      <label>Special filters</label><select id="statusFilter"><option value="">All current listings</option><option value="ebay">Also listed online</option><option value="discount">Discounted</option></select>
+      <label>Sort</label><select id="sortSelect"><option value="nameAsc">Name A-Z</option><option value="priceLow">Price low to high</option><option value="priceHigh">Price high to low</option><option value="newest">Newest first</option><option value="updated">Recently updated</option></select>
+      <label>Max price</label><input id="maxPriceFilter" type="number" min="0" placeholder="No limit" />
+      <label class="checkline"><input id="onlyImagesFilter" type="checkbox" /> Has photo</label>
+      <div class="filter-box"><strong>Tip</strong><p>Sold items are hidden by default. Check “See sold items” if you want to view past listings.</p></div>
+    </aside>
+
+    <section class="content">
+      <section class="deal-strip">
+        <div class="section-title tight"><div><p class="eyebrow">Featured</p><h2>Deals & Highlights</h2></div><div class="mini-action-row"><a class="secondary-btn small-btn" href="pages/deals.html">View all deals</a><a class="secondary-btn small-btn" href="pages/new-arrivals.html">See New Arrivals</a><a class="secondary-btn small-btn" href="pages/categories.html">Select Category</a></div></div>
+        <div id="dealRail" class="deal-rail"></div>
+      </section>
+      <div class="section-title" id="products"><div><p class="eyebrow">Marketplace</p><h2>Current Listings</h2></div><div class="view-actions"><button id="gridViewBtn" class="active">Grid</button><button id="listViewBtn">List</button></div></div>
+      <div id="loading" class="loading">Loading current listings...</div>
+      <div id="productGrid" class="product-grid"></div>
+      <div id="emptyState" class="empty-state" hidden><h3>No items found</h3><p>Try clearing filters or searching for something else.</p></div>
+      <section class="info-panels"><div><h3>How it works</h3><p>Browse listings, open item details, add items to your cart, then contact Bow Service.</p></div><div><h3>Availability</h3><p>Only listings marked exactly “sold” are hidden by default. Reserved and other statuses still display.</p></div><div><h3>Sold items</h3><p>Sold item pages can show a Buy on Amazon button when a reference link is available.</p></div></section>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="browseChoiceModal" hidden>
+    <div class="browse-choice-modal">
+      <button class="modal-close" id="browseChoiceClose" type="button">×</button>
+      <p class="eyebrow">Browse Marketplace</p>
+      <h2>How would you like to browse?</h2>
+      <p>Choose all current listings or pick a category first.</p>
+      <div class="browse-choice-actions">
+        <button class="primary-btn" id="browseAllItemsBtn" type="button">Browse all items</button>
+        <a class="secondary-btn" href="pages/categories.html">Select a category</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="adultModal" hidden><div class="age-modal"><h2>Age confirmation required</h2><p>This category may contain adult items. Please confirm that you are 18 years of age or older to continue.</p><div class="age-actions"><button id="adultConfirmBtn" class="primary-btn">I am 18 or older</button><button id="adultCancelBtn" class="secondary-btn">Cancel</button></div></div></div>
+
+  <footer><strong>Bow Service Marketplace</strong><p>Private marketplace listings by Bow Service. Not affiliated with Amazon, eBay, Google, or any outside marketplace.</p></footer>
+  <script src="config.js"></script><script src="js/utils.js"></script><script src="js/store.js"></script><script src="js/home.js"></script>
+<script src="js/marketplace-card-enhancer.js"></script></body>
+</html>

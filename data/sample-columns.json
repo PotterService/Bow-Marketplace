@@ -1,0 +1,22 @@
+{
+  "note": "Optional local sample data. The website loads from Google Sheets by default.",
+  "columns": [
+    "Item ID",
+    "Item Name",
+    "Category",
+    "Item Value",
+    "Description",
+    "Sale Price",
+    "Internal Code",
+    "Available",
+    "Image URLs",
+    "Amazon Link",
+    "Date Added",
+    "Last Updated",
+    "Notes",
+    "Discount",
+    "On Ebay",
+    "Ebay Link",
+    "Az"
+  ]
+}
