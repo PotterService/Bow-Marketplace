@@ -3,49 +3,536 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Featured Deals | Bow Service Marketplace</title>
+  <title>Biggest Deals | Bow Service Marketplace</title>
+
   <link rel="stylesheet" href="../css/styles.css">
   <link rel="stylesheet" href="../css/responsive.css">
+
   <style>
-    .deal-tools{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0;align-items:center}
-    .deal-pill{border:1px solid rgba(255,119,255,.35);border-radius:999px;padding:8px 12px;background:#fff;color:#24102d;font-weight:800}
-    .deal-note{background:#fff7ff;border:1px solid rgba(255,119,255,.25);border-radius:16px;padding:14px;margin:16px 0;color:#35113e}
-    .bow-deal-card{position:relative}
-    .bow-deal-ribbon{position:absolute;top:14px;left:14px;background:#ff77ff;color:#111;padding:8px 13px;border-radius:999px;font-weight:900;font-size:14px;box-shadow:0 4px 14px rgba(0,0,0,.18);z-index:5}
-    .bow-ic-pill{display:block;background:#f3eaff;color:#381052;border-radius:999px;padding:6px 10px;font-size:13px;font-weight:900;margin:10px 0}
-    .bow-price-line{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:12px 0}
-    .bow-price-line strong{font-size:26px}
-    .bow-value{font-size:14px;color:#777;line-height:1.05}
-    .bow-value span{text-decoration:line-through;display:block}
-    .bow-discount-bar{background:#ffe1fb;color:#a00098;border-radius:999px;padding:6px 10px;font-weight:900;font-size:13px;margin:8px 0}
+    .deals-page{
+      --deal-ink:#25102e;
+      --deal-muted:#706178;
+      --deal-line:rgba(255,119,255,.28);
+      --deal-pink:#ff77ff;
+      --deal-purple:#8c3fd1;
+      --deal-blue:#62d7ff;
+      --deal-gold:#ffd166;
+      color:var(--deal-ink);
+    }
+
+    .deals-hero{
+      position:relative;
+      overflow:hidden;
+      border-radius:30px;
+      padding:32px;
+      margin-bottom:20px;
+      color:#24102d;
+      background:
+        radial-gradient(circle at 86% 18%,rgba(98,215,255,.40),transparent 24rem),
+        radial-gradient(circle at 12% 8%,rgba(255,119,255,.30),transparent 22rem),
+        linear-gradient(135deg,#fff6ff,#eefaff);
+      border:1px solid var(--deal-line);
+      box-shadow:0 20px 60px rgba(75,28,91,.13);
+    }
+
+    .deals-hero h1{
+      margin:4px 0 10px;
+      font-size:clamp(2.15rem,5vw,4.4rem);
+      line-height:.96;
+    }
+
+    .deals-hero p{
+      max-width:790px;
+      color:#604f68;
+      line-height:1.65;
+    }
+
+    .deal-summary{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      margin:22px 0 0;
+    }
+
+    .deal-stat{
+      background:#fff;
+      border:1px solid var(--deal-line);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:0 10px 30px rgba(75,28,91,.08);
+    }
+
+    .deal-stat span{
+      display:block;
+      color:var(--deal-muted);
+      font-weight:800;
+      font-size:.82rem;
+    }
+
+    .deal-stat strong{
+      display:block;
+      margin-top:6px;
+      color:#34103e;
+      font-size:1.65rem;
+    }
+
+    .deal-tools{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin:18px 0;
+    }
+
+    .deal-search{
+      flex:1 1 270px;
+      min-width:220px;
+      border:1px solid var(--deal-line);
+      border-radius:999px;
+      padding:11px 15px;
+      background:#fff;
+      color:#24102d;
+      outline:none;
+    }
+
+    .deal-select,
+    .deal-pill{
+      border:1px solid var(--deal-line);
+      border-radius:999px;
+      padding:9px 12px;
+      background:#fff;
+      color:#24102d;
+      font-weight:800;
+    }
+
+    .deal-note{
+      background:#fff7ff;
+      border:1px solid var(--deal-line);
+      border-radius:18px;
+      padding:15px;
+      margin:16px 0 24px;
+      color:#4d2856;
+      line-height:1.55;
+    }
+
+    .top-deal{
+      display:grid;
+      grid-template-columns:minmax(280px,.9fr) minmax(0,1.1fr);
+      overflow:hidden;
+      margin:0 0 28px;
+      border-radius:28px;
+      background:linear-gradient(135deg,#35113e,#6c2a7e);
+      color:#fff;
+      box-shadow:0 20px 60px rgba(53,17,62,.22);
+    }
+
+    .top-deal-image{
+      min-height:360px;
+      position:relative;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#fff1ff,#e9faff);
+      overflow:hidden;
+    }
+
+    .top-deal-image img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .top-deal-content{
+      padding:30px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .top-deal-content .eyebrow{color:#ffb8ff}
+
+    .top-deal-content h2{
+      margin:4px 0 10px;
+      color:#fff;
+      font-size:clamp(1.8rem,4vw,3.3rem);
+    }
+
+    .top-deal-content p{
+      color:#f0dcf4;
+      line-height:1.6;
+    }
+
+    .top-deal-price{
+      display:flex;
+      align-items:baseline;
+      gap:12px;
+      flex-wrap:wrap;
+      margin:16px 0;
+    }
+
+    .top-deal-price strong{
+      font-size:2.25rem;
+      color:#fff;
+    }
+
+    .top-deal-was{
+      text-decoration:line-through;
+      color:#d9bddf;
+    }
+
+    .top-deal-save{
+      display:inline-flex;
+      width:max-content;
+      border-radius:999px;
+      padding:8px 12px;
+      background:var(--deal-gold);
+      color:#29102f;
+      font-weight:1000;
+    }
+
+    .top-deal-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .top-deal-actions a,
+    .top-deal-actions button{
+      border:0;
+      border-radius:13px;
+      padding:11px 15px;
+      text-decoration:none;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .top-view{
+      color:#301039;
+      background:linear-gradient(135deg,var(--deal-pink),var(--deal-blue));
+    }
+
+    .top-cart{
+      color:#fff;
+      background:rgba(255,255,255,.13);
+      border:1px solid rgba(255,255,255,.25)!important;
+    }
+
+    .deal-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(245px,1fr));
+      gap:16px;
+    }
+
+    .deal-card{
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      min-height:425px;
+      background:#fff;
+      border:1px solid var(--deal-line);
+      border-radius:24px;
+      box-shadow:0 14px 40px rgba(75,28,91,.10);
+      transition:.18s ease;
+    }
+
+    .deal-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 22px 58px rgba(75,28,91,.17);
+    }
+
+    .deal-card-image{
+      position:relative;
+      height:240px;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      background:linear-gradient(135deg,#fff4ff,#edfaff);
+    }
+
+    .deal-card-image img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .deal-ribbon{
+      position:absolute;
+      top:11px;
+      left:11px;
+      z-index:3;
+      border-radius:999px;
+      padding:7px 10px;
+      background:var(--deal-pink);
+      color:#111;
+      font-size:.74rem;
+      font-weight:1000;
+      box-shadow:0 5px 15px rgba(0,0,0,.18);
+    }
+
+    .deal-level{
+      position:absolute;
+      right:10px;
+      bottom:10px;
+      border-radius:999px;
+      padding:6px 9px;
+      color:#fff;
+      font-size:.7rem;
+      font-weight:1000;
+      background:#7b3f98;
+    }
+
+    .deal-level.clearance{background:#d92f61}
+    .deal-level.mega{background:#7c3aed}
+    .deal-level.great{background:#1677c8}
+    .deal-level.sale{background:#15946b}
+
+    .deal-card-body{
+      display:flex;
+      flex-direction:column;
+      flex:1;
+      padding:16px;
+    }
+
+    .deal-card-body h3{
+      margin:0 0 7px;
+      color:#2d1036;
+      font-size:1.06rem;
+    }
+
+    .deal-category{
+      margin:0 0 5px;
+      color:#9a42a4;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-size:.72rem;
+      font-weight:1000;
+    }
+
+    .deal-description{
+      color:var(--deal-muted);
+      font-size:.9rem;
+      line-height:1.45;
+      display:-webkit-box;
+      -webkit-line-clamp:2;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .deal-pricing{
+      margin-top:auto;
+      padding-top:12px;
+    }
+
+    .deal-now{
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .deal-now strong{
+      color:#6f1978;
+      font-size:1.45rem;
+    }
+
+    .deal-was{
+      color:#958899;
+      text-decoration:line-through;
+    }
+
+    .deal-save-line{
+      margin-top:7px;
+      color:#9c146f;
+      font-weight:900;
+      font-size:.85rem;
+    }
+
+    .deal-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:13px;
+    }
+
+    .deal-actions a,
+    .deal-actions button{
+      border:0;
+      border-radius:12px;
+      padding:9px 10px;
+      text-align:center;
+      text-decoration:none;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .deal-view{
+      color:#fff;
+      background:linear-gradient(135deg,var(--deal-purple),var(--deal-pink));
+    }
+
+    .deal-cart{
+      color:#55215e;
+      background:#fff2ff;
+      border:1px solid var(--deal-line)!important;
+    }
+
+    .deal-empty{
+      grid-column:1/-1;
+      text-align:center;
+      padding:45px 20px;
+      border:2px dashed var(--deal-line);
+      border-radius:22px;
+      background:#fffaff;
+      color:var(--deal-muted);
+    }
+
+    @media(max-width:880px){
+      .deal-summary{grid-template-columns:repeat(2,1fr)}
+      .top-deal{grid-template-columns:1fr}
+      .top-deal-image{min-height:285px}
+    }
+
+    @media(max-width:560px){
+      .deals-hero{padding:22px}
+      .deal-summary{grid-template-columns:1fr}
+      .deal-grid{grid-template-columns:1fr}
+      .deal-actions{grid-template-columns:1fr}
+    }
   </style>
 </head>
-<body>
+
+<body class="deals-page">
   <div id="toast" class="toast"></div>
+
   <header class="site-header">
     <div class="header-top">
       <button class="menu-btn" id="mobileMenuBtn">☰</button>
-      <a class="brand" href="../index.html"><span class="brand-mark">B</span><span><strong>Bow Service Marketplace</strong><small>Private Finds • Local Deals • Collectibles</small></span></a>
-      <div class="header-actions"><a class="header-action link-action" href="wishlist.html">♡ Wishlist</a><a class="header-action link-action" href="cart.html">🛒 Cart</a><a class="header-action link-action" href="login.html">Login</a></div>
+
+      <a class="brand" href="../index.html">
+        <span class="brand-mark">B</span>
+        <span>
+          <strong>Bow Service Marketplace</strong>
+          <small>Private Finds • Local Deals • Collectibles</small>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <a class="header-action link-action" href="wishlist.html">♡ Wishlist</a>
+        <a class="header-action link-action" href="cart.html">🛒 Cart</a>
+        <a class="header-action link-action" href="login.html">Login</a>
+      </div>
     </div>
-    <nav class="nav-bar" id="navBar"><a href="../index.html">Home</a><a href="deals.html">Featured Deals</a><a href="new-arrivals.html">New Arrivals</a><a href="categories.html">Categories</a><a href="wishlist.html">Wishlist</a><a href="cart.html">Cart</a><a href="contact.html">Contact</a><a href="terms.html">Terms</a></nav>
+
+    <nav class="nav-bar" id="navBar">
+      <a href="../index.html">Home</a>
+      <a class="active" href="deals.html">Featured Deals</a>
+      <a href="new-arrivals.html">New Arrivals</a>
+      <a href="categories.html">Categories</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="cart.html">Cart</a>
+      <a href="contact.html">Contact</a>
+      <a href="terms.html">Terms</a>
+    </nav>
   </header>
+
   <main class="simple-page">
-    <section class="admin-hero">
-      <p class="eyebrow">Featured Deals</p>
-      <h1>Deals & Highlights</h1>
-      <p>Browse discounted Bow Service Marketplace listings, sorted with the biggest discounts first.</p>
-      <div class="deal-tools"><span class="deal-pill" id="dealsCount">Loading...</span><a class="secondary-btn small-btn" href="new-arrivals.html">See New Arrivals</a><a class="secondary-btn small-btn" href="categories.html">Browse Categories</a></div>
+    <section class="deals-hero">
+      <p class="eyebrow">Biggest Savings First</p>
+      <h1>Bow Marketplace Deals</h1>
+      <p>
+        Every discounted listing is automatically sorted from the largest
+        percentage discount to the smallest, so the biggest savings always appear first.
+      </p>
+
+      <div class="deal-summary">
+        <article class="deal-stat">
+          <span>Deals Available</span>
+          <strong id="dealStatCount">0</strong>
+        </article>
+
+        <article class="deal-stat">
+          <span>Biggest Discount</span>
+          <strong id="dealStatBiggest">0%</strong>
+        </article>
+
+        <article class="deal-stat">
+          <span>Total Possible Savings</span>
+          <strong id="dealStatSavings">$0</strong>
+        </article>
+
+        <article class="deal-stat">
+          <span>Categories on Sale</span>
+          <strong id="dealStatCategories">0</strong>
+        </article>
+      </div>
+
+      <div class="deal-tools">
+        <input id="dealSearch" class="deal-search" type="search" placeholder="Search discounted items...">
+
+        <select id="dealCategory" class="deal-select">
+          <option value="">All Deal Categories</option>
+        </select>
+
+        <select id="dealMinimum" class="deal-select">
+          <option value="0">Any Discount</option>
+          <option value="10">10% or More</option>
+          <option value="25">25% or More</option>
+          <option value="50">50% or More</option>
+          <option value="70">70% or More</option>
+        </select>
+
+        <span class="deal-pill" id="dealsCount">Loading...</span>
+        <a class="secondary-btn small-btn" href="new-arrivals.html">New Arrivals</a>
+        <a class="secondary-btn small-btn" href="categories.html">Categories</a>
+      </div>
     </section>
-    <section class="deal-note"><strong>How this page works:</strong> it shows discounted listings first, with larger discounts at the top.</section>
-    <section id="dealsGrid" class="product-grid"></section>
+
+    <section class="deal-note">
+      <strong>Largest discounts appear first.</strong>
+      Discounts are calculated from the Discount column when available.
+      Otherwise, the page compares Item Value with Sale Price.
+    </section>
+
+    <section id="topDealSection" class="top-deal" hidden>
+      <div class="top-deal-image">
+        <img id="topDealImage" alt="">
+      </div>
+
+      <div class="top-deal-content">
+        <p class="eyebrow">🔥 Biggest Discount</p>
+        <h2 id="topDealName"></h2>
+        <p id="topDealDescription"></p>
+
+        <div class="top-deal-price">
+          <strong id="topDealPrice"></strong>
+          <span id="topDealWas" class="top-deal-was"></span>
+        </div>
+
+        <span class="top-deal-save" id="topDealSave"></span>
+
+        <div class="top-deal-actions">
+          <a id="topDealView" class="top-view">View Deal</a>
+          <button id="topDealCart" class="top-cart" type="button">Add to Cart</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="dealsGrid" class="deal-grid"></section>
   </main>
-  <footer><strong>Bow Service Marketplace</strong><p>Private marketplace listings by Bow Service. Not affiliated with Amazon, eBay, Google, or any outside marketplace.</p></footer>
+
+  <footer>
+    <strong>Bow Service Marketplace</strong>
+    <p>
+      Private marketplace listings by Bow Service.
+      Not affiliated with Amazon, eBay, Google, or any outside marketplace.
+    </p>
+  </footer>
+
   <script src="../config.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/store.js"></script>
   <script src="../js/shared-pages.js"></script>
-  <script src="../js/pages.js"></script>
-  <script src="../js/deals.js"></script>
+  <script src="../js/deals-v2.js"></script>
 </body>
 </html>

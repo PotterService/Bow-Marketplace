@@ -1,1 +1,442 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Categories | Bow Service Marketplace</title><link rel="stylesheet" href="../css/styles.css"><link rel="stylesheet" href="../css/responsive.css"></head><body><div id="toast" class="toast"></div><header class="site-header"><div class="header-top"><button class="menu-btn" id="mobileMenuBtn">☰</button><a class="brand" href="../index.html"><span class="brand-mark">B</span><span><strong>Bow Service Marketplace</strong><small>Private Finds • Local Deals • Collectibles</small></span></a><div class="header-actions"><a class="header-action link-action" href="wishlist.html">♡ Wishlist</a><a class="header-action link-action" href="cart.html">🛒 Cart</a><a class="header-action link-action" href="login.html">Login</a></div></div><nav class="nav-bar" id="navBar"><a href="../index.html">Home</a><a href="deals.html">Featured Deals</a><a href="new-arrivals.html">New Arrivals</a><a href="categories.html">Categories</a><a href="wishlist.html">Wishlist</a><a href="cart.html">Cart</a><a href="contact.html">Contact</a><a href="terms.html">Terms</a></nav></header><main class="simple-page"><section class="admin-hero"><p class="eyebrow">Browse</p><h1>Select a Category</h1><p>Pick a category to open the marketplace with that category ready to browse.</p></section><section id="categoryPageGrid" class="category-page-grid"></section></main><footer><strong>Bow Service Marketplace</strong><p>Private marketplace listings by Bow Service. Not affiliated with Amazon, eBay, Google, or any outside marketplace.</p></footer><script src="../config.js"></script><script src="../js/utils.js"></script><script src="../js/store.js"></script><script src="../js/shared-pages.js"></script><script src="../js/categories.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop Categories | Bow Service Marketplace</title>
+
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+
+  <style>
+    .categories-page{
+      --cat-ink:#25102e;
+      --cat-muted:#706178;
+      --cat-line:rgba(255,119,255,.26);
+      --cat-pink:#ff77ff;
+      --cat-purple:#8c3fd1;
+      --cat-blue:#63d8ff;
+      color:var(--cat-ink);
+    }
+
+    .categories-hero{
+      position:relative;
+      overflow:hidden;
+      border-radius:30px;
+      padding:32px;
+      margin-bottom:20px;
+      color:#24102d;
+      background:
+        radial-gradient(circle at 88% 18%,rgba(99,216,255,.38),transparent 25rem),
+        radial-gradient(circle at 10% 10%,rgba(255,119,255,.28),transparent 22rem),
+        linear-gradient(135deg,#fff8ff,#effaff);
+      border:1px solid var(--cat-line);
+      box-shadow:0 20px 60px rgba(75,28,91,.13);
+    }
+
+    .categories-hero h1{
+      margin:4px 0 10px;
+      font-size:clamp(2.15rem,5vw,4.3rem);
+      line-height:.96;
+    }
+
+    .categories-hero p{
+      max-width:780px;
+      color:#604f68;
+      line-height:1.65;
+    }
+
+    .category-tools{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top:19px;
+    }
+
+    .category-search{
+      flex:1 1 280px;
+      min-width:220px;
+      border:1px solid var(--cat-line);
+      border-radius:999px;
+      padding:11px 15px;
+      background:#fff;
+      color:#24102d;
+      outline:none;
+    }
+
+    .category-sort,
+    .category-count{
+      border:1px solid var(--cat-line);
+      border-radius:999px;
+      padding:9px 12px;
+      background:#fff;
+      color:#24102d;
+      font-weight:800;
+    }
+
+    .category-summary{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+      margin:22px 0 0;
+    }
+
+    .category-stat{
+      background:#fff;
+      border:1px solid var(--cat-line);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:0 10px 30px rgba(75,28,91,.08);
+    }
+
+    .category-stat span{
+      display:block;
+      color:var(--cat-muted);
+      font-size:.82rem;
+      font-weight:800;
+    }
+
+    .category-stat strong{
+      display:block;
+      margin-top:6px;
+      color:#34103e;
+      font-size:1.65rem;
+    }
+
+    .popular-categories{
+      margin:27px 0 34px;
+    }
+
+    .category-section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:18px;
+      margin-bottom:14px;
+    }
+
+    .category-section-head h2{
+      margin:0;
+      color:#2e1037;
+      font-size:clamp(1.5rem,3vw,2.3rem);
+    }
+
+    .category-section-head p{
+      margin:4px 0 0;
+      color:var(--cat-muted);
+    }
+
+    .popular-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:16px;
+    }
+
+    .popular-card{
+      display:grid;
+      grid-template-columns:100px 1fr;
+      overflow:hidden;
+      min-height:145px;
+      color:#fff;
+      text-decoration:none;
+      border-radius:24px;
+      background:linear-gradient(135deg,#35113e,#78418a);
+      box-shadow:0 16px 42px rgba(53,17,62,.18);
+      transition:.18s ease;
+    }
+
+    .popular-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 24px 60px rgba(53,17,62,.25);
+    }
+
+    .popular-icon{
+      display:grid;
+      place-items:center;
+      font-size:3.25rem;
+      background:rgba(255,255,255,.10);
+    }
+
+    .popular-content{
+      padding:18px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .popular-content h3{
+      margin:0 0 7px;
+      color:#fff;
+    }
+
+    .popular-content span{
+      color:#efdff2;
+      font-size:.88rem;
+    }
+
+    .category-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      gap:17px;
+    }
+
+    .category-card{
+      position:relative;
+      overflow:hidden;
+      min-height:370px;
+      display:flex;
+      flex-direction:column;
+      background:#fff;
+      border:1px solid var(--cat-line);
+      border-radius:25px;
+      box-shadow:0 14px 40px rgba(75,28,91,.10);
+      transition:.18s ease;
+    }
+
+    .category-card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 22px 58px rgba(75,28,91,.17);
+    }
+
+    .category-image{
+      height:190px;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      background:linear-gradient(135deg,#fff3ff,#edfaff);
+    }
+
+    .category-image img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .category-image .category-icon-large{
+      font-size:4.3rem;
+    }
+
+    .category-badge{
+      position:absolute;
+      top:11px;
+      left:11px;
+      z-index:2;
+      border-radius:999px;
+      padding:6px 9px;
+      background:var(--cat-pink);
+      color:#111;
+      font-size:.72rem;
+      font-weight:1000;
+      box-shadow:0 5px 15px rgba(0,0,0,.16);
+    }
+
+    .category-body{
+      display:flex;
+      flex-direction:column;
+      flex:1;
+      padding:17px;
+    }
+
+    .category-body h3{
+      margin:0 0 7px;
+      color:#2d1036;
+      font-size:1.18rem;
+    }
+
+    .category-body p{
+      color:var(--cat-muted);
+      line-height:1.45;
+      font-size:.9rem;
+      min-height:40px;
+    }
+
+    .category-metrics{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:7px;
+      margin:12px 0;
+    }
+
+    .category-metric{
+      border:1px solid #eee2f1;
+      border-radius:13px;
+      padding:9px 6px;
+      background:#fff9ff;
+      text-align:center;
+    }
+
+    .category-metric strong{
+      display:block;
+      color:#6e2378;
+      font-size:1.02rem;
+    }
+
+    .category-metric span{
+      display:block;
+      color:#7b6c80;
+      font-size:.69rem;
+      font-weight:800;
+      margin-top:2px;
+    }
+
+    .category-latest{
+      margin-top:auto;
+      color:#76677b;
+      font-size:.8rem;
+      line-height:1.4;
+    }
+
+    .category-open{
+      display:block;
+      margin-top:13px;
+      border-radius:13px;
+      padding:10px 12px;
+      text-align:center;
+      text-decoration:none;
+      color:#fff;
+      font-weight:1000;
+      background:linear-gradient(135deg,var(--cat-purple),var(--cat-pink));
+    }
+
+    .category-empty{
+      grid-column:1/-1;
+      text-align:center;
+      padding:44px 20px;
+      border:2px dashed var(--cat-line);
+      border-radius:22px;
+      background:#fffaff;
+      color:var(--cat-muted);
+    }
+
+    @media(max-width:900px){
+      .category-summary{grid-template-columns:repeat(2,1fr)}
+      .popular-grid{grid-template-columns:1fr}
+    }
+
+    @media(max-width:560px){
+      .categories-hero{padding:22px}
+      .category-summary{grid-template-columns:1fr}
+      .category-grid{grid-template-columns:1fr}
+      .category-section-head{display:block}
+    }
+  </style>
+</head>
+
+<body class="categories-page">
+  <div id="toast" class="toast"></div>
+
+  <header class="site-header">
+    <div class="header-top">
+      <button class="menu-btn" id="mobileMenuBtn">☰</button>
+
+      <a class="brand" href="../index.html">
+        <span class="brand-mark">B</span>
+        <span>
+          <strong>Bow Service Marketplace</strong>
+          <small>Private Finds • Local Deals • Collectibles</small>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <a class="header-action link-action" href="wishlist.html">♡ Wishlist</a>
+        <a class="header-action link-action" href="cart.html">🛒 Cart</a>
+        <a class="header-action link-action" href="login.html">Login</a>
+      </div>
+    </div>
+
+    <nav class="nav-bar" id="navBar">
+      <a href="../index.html">Home</a>
+      <a href="deals.html">Featured Deals</a>
+      <a href="new-arrivals.html">New Arrivals</a>
+      <a class="active" href="categories.html">Categories</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="cart.html">Cart</a>
+      <a href="contact.html">Contact</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main class="simple-page">
+    <section class="categories-hero">
+      <p class="eyebrow">Explore Bow Marketplace</p>
+      <h1>Shop by Category</h1>
+      <p>
+        Browse larger visual category tiles showing how many items,
+        current deals, and recently added listings are available in each section.
+      </p>
+
+      <div class="category-summary">
+        <article class="category-stat">
+          <span>Total Categories</span>
+          <strong id="categoryStatTotal">0</strong>
+        </article>
+
+        <article class="category-stat">
+          <span>Available Items</span>
+          <strong id="categoryStatItems">0</strong>
+        </article>
+
+        <article class="category-stat">
+          <span>Discounted Items</span>
+          <strong id="categoryStatDeals">0</strong>
+        </article>
+
+        <article class="category-stat">
+          <span>New in 30 Days</span>
+          <strong id="categoryStatNew">0</strong>
+        </article>
+      </div>
+
+      <div class="category-tools">
+        <input id="categorySearch" class="category-search" type="search" placeholder="Search categories...">
+
+        <select id="categorySort" class="category-sort">
+          <option value="items">Most Items</option>
+          <option value="deals">Most Deals</option>
+          <option value="new">Most New Items</option>
+          <option value="name">Name A–Z</option>
+        </select>
+
+        <span class="category-count" id="categoryCount">Loading...</span>
+      </div>
+    </section>
+
+    <section class="popular-categories">
+      <div class="category-section-head">
+        <div>
+          <h2>🔥 Popular Categories</h2>
+          <p>The categories with the most available listings.</p>
+        </div>
+      </div>
+
+      <div id="popularCategoryGrid" class="popular-grid"></div>
+    </section>
+
+    <section>
+      <div class="category-section-head">
+        <div>
+          <h2>All Categories</h2>
+          <p>Select a category to open the main marketplace already filtered.</p>
+        </div>
+      </div>
+
+      <div id="categoryPageGrid" class="category-grid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>Bow Service Marketplace</strong>
+    <p>
+      Private marketplace listings by Bow Service.
+      Not affiliated with Amazon, eBay, Google, or any outside marketplace.
+    </p>
+  </footer>
+
+  <script src="../config.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/store.js"></script>
+  <script src="../js/shared-pages.js"></script>
+  <script src="../js/categories-v2.js"></script>
+</body>
+</html>
