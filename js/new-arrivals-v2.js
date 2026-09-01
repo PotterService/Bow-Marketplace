@@ -54,11 +54,11 @@
     return String(urls || "").split(",")[0].trim();
   };
 
-  const money = amount =>
-    Number(amount || 0).toLocaleString(undefined, {
-      style: "currency",
-      currency: "USD"
-    });
+  const money = amount => {
+    const value = Number(amount || 0);
+    if (!Number.isFinite(value) || value <= 0) return "Contact";
+    return value.toLocaleString(undefined, { style: "currency", currency: "USD" });
+  };
 
   const esc = value =>
     String(value ?? "").replace(/[&<>"']/g, char => ({
@@ -106,6 +106,9 @@
     let items = [];
 
     try {
+      if (window.BowStore?.fetchItems) {
+        items = await window.BowStore.fetchItems();
+      } else
       if (window.BOW_STORE?.getProducts) {
         items = await window.BOW_STORE.getProducts();
       } else if (window.store?.getProducts) {
@@ -176,9 +179,24 @@
   function lists() {
     const items = visibleItems();
 
+    // The bottom of the Inventory sheet is treated as the newest end of the list.
+    // If Date Added is missing, recent bottom rows can still appear under New Arrivals.
+    const undatedRecentCount = 15;
+    const byRowNewest = [...items].sort((a, b) => Number(b.rowOrder ?? -1) - Number(a.rowOrder ?? -1));
+    const recentUndated = new Set(
+      byRowNewest.filter(item => !parseDate(dateAddedOf(item))).slice(0, undatedRecentCount)
+    );
+
     const newlyAdded = items
-      .filter(item => withinDays(dateAddedOf(item), state.range))
-      .sort((a, b) => (parseDate(dateAddedOf(b)) || 0) - (parseDate(dateAddedOf(a)) || 0));
+      .filter(item => withinDays(dateAddedOf(item), state.range) || recentUndated.has(item))
+      .sort((a, b) => {
+        const bd = parseDate(dateAddedOf(b));
+        const ad = parseDate(dateAddedOf(a));
+        if (bd && ad && bd.getTime() !== ad.getTime()) return bd - ad;
+        if (bd && !ad) return -1;
+        if (!bd && ad) return 1;
+        return Number(b.rowOrder ?? -1) - Number(a.rowOrder ?? -1);
+      });
 
     const recentlyUpdated = items
       .filter(item => withinDays(lastUpdatedOf(item), state.range))
@@ -194,7 +212,6 @@
 
     return { newlyAdded, recentlyUpdated, ordered, processing };
   }
-
   function ribbon(item, type) {
     if (isSold(item)) return '<span class="arrival-ribbon sold">SOLD</span>';
     if (type === "new") return '<span class="arrival-ribbon">NEW</span>';
@@ -206,7 +223,11 @@
 
   function itemLink(item) {
     const id = encodeURIComponent(itemIdOf(item));
-    return id ? `product.html?id=${id}` : "#";
+    return id ? `item.html?id=${id}` : "#";
+  }
+
+  function amazonLinkOf(item) {
+    return item.amazonLink || item.raw?.["Amazon Link"] || item.raw?.["Amazon"] || `https://www.amazon.com/s?k=${encodeURIComponent(nameOf(item) || "")}`;
   }
 
   function card(item, type) {
@@ -231,18 +252,19 @@
 
           <div class="arrival-meta">
             <span><strong>Category:</strong> ${esc(categoryOf(item))}</span>
-            <span><strong>Added:</strong> ${esc(relativeDate(dateAddedOf(item)))}</span>
+            <span><strong>Added:</strong> ${esc(parseDate(dateAddedOf(item)) ? relativeDate(dateAddedOf(item)) : "Recently added")}</span>
             <span><strong>Updated:</strong> ${esc(relativeDate(lastUpdatedOf(item)))}</span>
             <span><strong>Status:</strong> ${esc(statusOf(item))}</span>
           </div>
 
-          <div class="arrival-price">
-            <strong>${money(salePrice)}</strong>
-            ${discount ? `<span class="arrival-old-price">${money(itemValue)}</span>` : ""}
+          <div class="bow-price-compare">
+            ${itemValue > 0 ? `<div class="amazon-price"><span>Amazon</span><del>${money(itemValue)}</del></div>` : ""}
+            <div class="our-price"><span>Bow Price</span><strong>${money(salePrice)}</strong></div>
           </div>
 
           <div class="arrival-actions">
-            <a class="arrival-view" href="${esc(itemLink(item))}">View Details</a>
+            <a class="arrival-view" target="_blank" rel="noopener" href="${esc(amazonLinkOf(item))}">View on Amazon</a>
+            <a class="arrival-view secondary-action" href="${esc(itemLink(item))}">Item Page</a>
             <button class="arrival-wish" type="button" data-wishlist="${esc(itemIdOf(item))}">♡ Wishlist</button>
           </div>
         </div>

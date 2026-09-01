@@ -282,7 +282,6 @@
       background:#7b3f98;
     }
 
-    .deal-level.clearance{background:#d92f61}
     .deal-level.mega{background:#7c3aed}
     .deal-level.great{background:#1677c8}
     .deal-level.sale{background:#15946b}
@@ -407,30 +406,24 @@
 
   <header class="site-header">
     <div class="header-top">
-      <button class="menu-btn" id="mobileMenuBtn">☰</button>
-
-      <a class="brand" href="../index.html">
-        <span class="brand-mark">B</span>
-        <span>
-          <strong>Bow Service Marketplace</strong>
-          <small>Private Finds • Local Deals • Collectibles</small>
-        </span>
-      </a>
-
+      <button class="menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+      <a class="brand" href="../index.html"><span class="brand-mark">B</span><span><strong id="storeName">Bow Service Marketplace</strong><small>Private Finds • Local Deals • Collectibles</small></span></a>
+      <div class="search-box">
+        <select id="categorySearchSelect"><option value="">All</option></select>
+        <input id="globalSearch" type="search" placeholder="Search Bow Service Marketplace..." />
+        <button id="searchBtn">Search</button>
+      </div>
       <div class="header-actions">
         <a class="header-action link-action" href="wishlist.html">♡ Wishlist</a>
-        <a class="header-action link-action" href="cart.html">🛒 Cart</a>
-        <a class="header-action link-action" href="login.html">Login</a>
       </div>
     </div>
-
     <nav class="nav-bar" id="navBar">
       <a href="../index.html">Home</a>
-      <a class="active" href="deals.html">Featured Deals</a>
+      <a href="deals.html">Deals</a>
       <a href="new-arrivals.html">New Arrivals</a>
       <a href="categories.html">Categories</a>
+      <a href="../index.html#products">Shop Items</a>
       <a href="wishlist.html">Wishlist</a>
-      <a href="cart.html">Cart</a>
       <a href="contact.html">Contact</a>
       <a href="terms.html">Terms</a>
     </nav>
@@ -500,7 +493,7 @@
       </div>
 
       <div class="top-deal-content">
-        <p class="eyebrow">🔥 Biggest Discount</p>
+        <p class="eyebrow">Best Current Savings</p>
         <h2 id="topDealName"></h2>
         <p id="topDealDescription"></p>
 
@@ -513,12 +506,12 @@
 
         <div class="top-deal-actions">
           <a id="topDealView" class="top-view">View Deal</a>
-          <button id="topDealCart" class="top-cart" type="button">Add to Cart</button>
+          <a id="topDealAmazon" class="top-cart" target="_blank" rel="noopener">View on Amazon</a>
         </div>
       </div>
     </section>
 
-    <section id="dealsGrid" class="deal-grid"></section>
+    <section id="dealsGrid" class="product-grid"></section>
   </main>
 
   <footer>

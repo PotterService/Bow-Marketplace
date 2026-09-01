@@ -179,9 +179,14 @@
   }
 
   async function loadItems() {
-    const res = await fetch(apiUrl, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Could not load marketplace sheet');
-    items = await res.json();
+    if (window.BowStore?.fetchItems) {
+      const normalized = await window.BowStore.fetchItems();
+      items = normalized.map(item => item.raw || item);
+    } else {
+      const res = await fetch(apiUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Could not load marketplace sheet');
+      items = await res.json();
+    }
     byId = new Map();
     byName = new Map();
     items.forEach(item => {
@@ -189,7 +194,6 @@
       if (clean(item['Item Name'])) byName.set(normalizeKey(item['Item Name']), item);
     });
   }
-
   async function start() {
     injectStyles();
     try {

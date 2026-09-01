@@ -28,7 +28,7 @@ window.STORE_CONFIG = {
   },
 
   features: {
-    enableCart: true,
+    enableCart: false,
     enableWishlist: true,
     enableCompare: true,
     enableProductModal: true,

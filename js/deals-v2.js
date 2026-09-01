@@ -30,7 +30,7 @@
     const value = Number(item.itemValue || 0);
     const price = Number(item.salePrice || 0);
 
-    if (value > 0 && price >= 0 && price < value) {
+    if (value > 0 && price > 0 && price < value) {
       return ((value - price) / value) * 100;
     }
 
@@ -44,10 +44,9 @@
   }
 
   function priceText(value) {
-    return Number(value || 0).toLocaleString(undefined, {
-      style: "currency",
-      currency: "USD"
-    });
+    const price = Number(value || 0);
+    if (!Number.isFinite(price) || price <= 0) return "Contact";
+    return price.toLocaleString(undefined, { style: "currency", currency: "USD" });
   }
 
   function itemUrl(item) {
@@ -58,11 +57,8 @@
     return item.images?.[0] || `../${STORE_CONFIG.defaultImage}`;
   }
 
-  function dealLevel(percent) {
-    if (percent >= 70) return { text: "Clearance", cls: "clearance" };
-    if (percent >= 50) return { text: "Mega Deal", cls: "mega" };
-    if (percent >= 25) return { text: "Great Deal", cls: "great" };
-    return { text: "Sale", cls: "sale" };
+  function amazonUrl(item) {
+    return item.amazonLink || `https://www.amazon.com/s?k=${encodeURIComponent(item.name || "")}`;
   }
 
   function sortedDeals(items) {
@@ -143,68 +139,41 @@
     $("topDealImage").alt = item.name || "Top deal";
     $("topDealName").textContent = item.name || "Featured Deal";
     $("topDealDescription").textContent =
-      item.description || "One of the biggest savings currently available.";
-    $("topDealPrice").textContent = priceText(item.salePrice);
+      item.description || "Compare the Amazon price with Bow’s price.";
+    $("topDealPrice").textContent = `Bow Price ${priceText(item.salePrice)}`;
     $("topDealWas").textContent =
-      item.itemValue > item.salePrice ? `Was ${priceText(item.itemValue)}` : "";
+      item.itemValue > 0 ? `Amazon ${priceText(item.itemValue)}` : "";
     $("topDealSave").textContent =
       `${Math.round(top.discount)}% OFF • Save ${priceText(top.savings)}`;
     $("topDealView").href = itemUrl(item);
-    $("topDealCart").dataset.cart = item.id;
+    $("topDealAmazon").href = amazonUrl(item);
   }
 
-  function cardHtml(entry, index) {
+  function cardHtml(entry) {
     const item = entry.item;
-    const level = dealLevel(entry.discount);
     const wish = S.wishlist.includes(item.id) ? "♥" : "♡";
+    const amazon = amazonUrl(item);
 
     return `
-      <article class="deal-card">
-        <div class="deal-card-image">
-          <span class="deal-ribbon">#${index + 1} • ${Math.round(entry.discount)}% OFF</span>
-          <span class="deal-level ${level.cls}">${level.text}</span>
-
-          <button
-            class="wish-btn"
-            data-wish="${U.escape(item.id)}"
-            aria-label="Add ${U.escape(item.name)} to wishlist"
-          >${wish}</button>
-
-          <a href="${itemUrl(item)}">
-            <img
-              src="${U.escape(imageOf(item))}"
-              alt="${U.escape(item.name)}"
-              onerror="this.src='../${U.escape(STORE_CONFIG.defaultImage)}'"
-            >
-          </a>
-        </div>
-
-        <div class="deal-card-body">
-          <p class="deal-category">${U.escape(item.category || "Other")}</p>
+      <article class="product-card">
+        <button class="wish-btn" data-wish="${U.escape(item.id)}">${wish}</button>
+        <a class="image-btn" href="${itemUrl(item)}" style="position:relative;display:block">
+          <span class="bow-photo-discount">${Math.round(entry.discount)}% OFF</span>
+          <img src="${U.escape(imageOf(item))}" alt="${U.escape(item.name)}" onerror="this.src='../${U.escape(STORE_CONFIG.defaultImage)}'">
+        </a>
+        <div class="product-info">
+          <p class="category">${U.escape(item.category || "Other")}</p>
           <h3><a href="${itemUrl(item)}">${U.escape(item.name)}</a></h3>
-
-          <p class="deal-description">
-            ${U.escape(item.description || "Discounted Bow Marketplace listing.")}
-          </p>
-
-          <div class="deal-pricing">
-            <div class="deal-now">
-              <strong>Now ${priceText(item.salePrice)}</strong>
-              ${
-                item.itemValue > item.salePrice
-                  ? `<span class="deal-was">Was ${priceText(item.itemValue)}</span>`
-                  : ""
-              }
-            </div>
-
-            <div class="deal-save-line">
-              You save ${priceText(entry.savings)} • ${Math.round(entry.discount)}% off
-            </div>
+          <p class="desc">${U.escape(item.description || "Discounted Bow Marketplace listing.")}</p>
+          <div class="bow-price-compare">${Number(item.itemValue||0)>0?`<div class="amazon-price"><span>Amazon</span><del>${priceText(item.itemValue)}</del></div>`:""}<div class="our-price"><span>Bow Price</span><strong>${priceText(item.salePrice)}</strong></div></div>
+          <div class="meta">
+            ${item.internalCode ? `<span>IC: ${U.escape(item.internalCode)}</span>` : ""}
+            <span class="ok">${U.escape(item.availableStatus || "Available")}</span>
           </div>
-
-          <div class="deal-actions">
-            <a class="deal-view" href="${itemUrl(item)}">View Deal</a>
-            <button class="deal-cart" data-cart="${U.escape(item.id)}">Add to Cart</button>
+          <div class="product-actions">
+            
+            <a class="button-link" target="_blank" rel="noopener" href="${U.escape(amazon)}">View on Amazon</a>
+            <a class="button-link secondary-action" href="${itemUrl(item)}">Item Page</a>
           </div>
         </div>
       </article>
@@ -269,13 +238,8 @@
   });
 
   document.addEventListener("click", event => {
-    const cart = event.target.closest("[data-cart]")?.dataset.cart;
     const wish = event.target.closest("[data-wish]")?.dataset.wish;
 
-    if (cart) {
-      S.addToCart(cart);
-      U.toast("Added to cart");
-    }
 
     if (wish) {
       S.toggleWishlist(wish);

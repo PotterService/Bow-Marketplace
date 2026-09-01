@@ -96,8 +96,7 @@
     if (sale) {
       return `<div class="price-row"><strong>$${sale.toFixed(2)}</strong>${value ? `<span class="muted-price">Value $${value.toFixed(2)}</span>` : ''}</div>${discount ? `<span class="deal-badge">${discount}% off</span>` : ''}`;
     }
-    if (value) return `<div class="price-row"><strong>$${value.toFixed(2)}</strong></div>`;
-    return '<div class="price-row"><strong>Contact for price</strong></div>';
+    return `<div class="price-row"><strong>Contact</strong>${value ? `<span class="muted-price">Value $${value.toFixed(2)}</span>` : ''}</div>`;
   }
 
   function card(item, options = {}) {

@@ -1,13 +1,36 @@
 window.BowStore = {
   items: [],
-  cart: JSON.parse(localStorage.getItem("bow_cart") || "[]"),
+  _fetchPromise: null,
+  _cacheKey: "bow_marketplace_inventory_cache_v2",
+  _cacheMaxAge: 120000,
+  cart: [],
   wishlist: JSON.parse(localStorage.getItem("bow_wishlist") || "[]"),
 
-  async fetchItems() {
+  async fetchItems(options = {}) {
+    const force = Boolean(options.force);
+    if (!force && this.items.length) return this.items;
+    if (!force && this._fetchPromise) return this._fetchPromise;
+
+    if (!force) {
+      try {
+        const cached = JSON.parse(sessionStorage.getItem(this._cacheKey) || "null");
+        if (cached && Array.isArray(cached.rows) && Date.now() - Number(cached.savedAt || 0) < this._cacheMaxAge) {
+          this.items = cached.rows.map((row, index) => this.normalize(row, index)).filter(item => item.name);
+          return this.items;
+        }
+      } catch (e) {
+        console.warn("Marketplace cache could not be read:", e);
+      }
+    }
+
     const cfg = window.STORE_CONFIG;
-    const rows = await this.loadSheetRows(cfg);
-    this.items = rows.map((row, index) => this.normalize(row, index)).filter(item => item.name);
-    return this.items;
+    this._fetchPromise = this.loadSheetRows(cfg).then(rows => {
+      this.items = rows.map((row, index) => this.normalize(row, index)).filter(item => item.name);
+      try { sessionStorage.setItem(this._cacheKey, JSON.stringify({ savedAt: Date.now(), rows })); } catch (_) {}
+      return this.items;
+    }).finally(() => { this._fetchPromise = null; });
+
+    return this._fetchPromise;
   },
 
   async loadSheetRows(cfg) {
@@ -18,30 +41,31 @@ window.BowStore = {
       `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${sheetName}`
     ];
 
-    let lastError = null;
+    const fetchSource = async (url) => {
+      const response = await fetch(url, { cache: "no-store" });
+      if (!response.ok) throw new Error(`Sheet fetch failed: ${response.status}`);
+      const text = await response.text();
+      const contentType = response.headers.get("content-type") || "";
+      if (contentType.includes("application/json") || text.trim().startsWith("[")) return JSON.parse(text);
+      return this.csvToObjects(text);
+    };
 
-    for (const url of urls) {
-      try {
-        const response = await fetch(url, { cache: "no-store" });
-        if (!response.ok) throw new Error(`Sheet fetch failed: ${response.status}`);
-
-        const text = await response.text();
-        const contentType = response.headers.get("content-type") || "";
-
-        if (contentType.includes("application/json") || text.trim().startsWith("[")) {
-          return JSON.parse(text);
-        }
-
-        return this.csvToObjects(text);
-      } catch (err) {
-        console.warn("BowStore sheet source failed, trying fallback:", url, err);
-        lastError = err;
-      }
+    // Ask both public sheet endpoints at once and use whichever responds first.
+    // This avoids waiting on a slow primary endpoint before trying the fallback.
+    if (typeof Promise.any === "function") {
+      return Promise.any(urls.map(fetchSource));
     }
 
-    throw lastError || new Error("Unable to load Google Sheet data.");
+    return new Promise((resolve, reject) => {
+      let failures = 0;
+      let lastError = null;
+      urls.forEach(url => fetchSource(url).then(resolve).catch(err => {
+        lastError = err;
+        failures += 1;
+        if (failures === urls.length) reject(lastError);
+      }));
+    });
   },
-
   csvToObjects(csvText) {
     const rows = this.parseCSV(csvText);
     if (!rows.length) return [];
@@ -106,6 +130,7 @@ window.BowStore = {
 
     return {
       raw: row,
+      rowOrder: index,
       id,
       itemId: U.text(F("Item ID")),
       name: U.text(F("Item Name")),

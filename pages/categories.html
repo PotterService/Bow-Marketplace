@@ -328,30 +328,24 @@
 
   <header class="site-header">
     <div class="header-top">
-      <button class="menu-btn" id="mobileMenuBtn">☰</button>
-
-      <a class="brand" href="../index.html">
-        <span class="brand-mark">B</span>
-        <span>
-          <strong>Bow Service Marketplace</strong>
-          <small>Private Finds • Local Deals • Collectibles</small>
-        </span>
-      </a>
-
+      <button class="menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
+      <a class="brand" href="../index.html"><span class="brand-mark">B</span><span><strong id="storeName">Bow Service Marketplace</strong><small>Private Finds • Local Deals • Collectibles</small></span></a>
+      <div class="search-box">
+        <select id="categorySearchSelect"><option value="">All</option></select>
+        <input id="globalSearch" type="search" placeholder="Search Bow Service Marketplace..." />
+        <button id="searchBtn">Search</button>
+      </div>
       <div class="header-actions">
         <a class="header-action link-action" href="wishlist.html">♡ Wishlist</a>
-        <a class="header-action link-action" href="cart.html">🛒 Cart</a>
-        <a class="header-action link-action" href="login.html">Login</a>
       </div>
     </div>
-
     <nav class="nav-bar" id="navBar">
       <a href="../index.html">Home</a>
-      <a href="deals.html">Featured Deals</a>
+      <a href="deals.html">Deals</a>
       <a href="new-arrivals.html">New Arrivals</a>
-      <a class="active" href="categories.html">Categories</a>
+      <a href="categories.html">Categories</a>
+      <a href="../index.html#products">Shop Items</a>
       <a href="wishlist.html">Wishlist</a>
-      <a href="cart.html">Cart</a>
       <a href="contact.html">Contact</a>
       <a href="terms.html">Terms</a>
     </nav>

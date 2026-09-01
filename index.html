@@ -8,12 +8,9 @@
   <link rel="stylesheet" href="css/responsive.css" />
 
   <style>
-    .deal-strip{background:linear-gradient(135deg,#fff3ff,#ffffff);border:2px solid rgba(255,119,255,.35);border-radius:24px;padding:18px;box-shadow:0 10px 30px rgba(53,17,62,.12);margin-bottom:24px;}
-    .deal-strip .section-title{background:#35113e;color:#fff;border-radius:18px;padding:14px 16px;margin-bottom:16px;}
-    .deal-strip .section-title .eyebrow{color:#ffb3ff;}
-    .deal-strip .section-title h2{color:#fff;margin:0;}
-    .deal-strip .small-btn{background:#fff;color:#35113e;border-color:#fff;font-weight:900;}
-    .deal-rail{background:#fff;border-radius:18px;padding:12px;}
+    .bow-promise{margin:18px auto 0;max-width:1240px;padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,#35113e,#6f2b7c);color:#fff;box-shadow:0 12px 30px rgba(53,17,62,.18);}
+    .bow-promise strong{display:block;font-size:1.15rem;margin-bottom:5px;}
+    .bow-promise p{margin:0;line-height:1.55;color:#f7eafa;}
   </style>
 </head>
 <body>
@@ -29,40 +26,53 @@
       </div>
       <div class="header-actions">
         <a class="header-action link-action" href="pages/wishlist.html">♡ Wishlist</a>
-        <a class="header-action link-action" href="pages/cart.html">🛒 Cart</a>
-        <a class="header-action link-action" href="pages/login.html">Login</a>
       </div>
     </div>
     <nav class="nav-bar" id="navBar">
       <a href="index.html">Home</a>
-      <a href="pages/deals.html">Featured Deals</a>
+      <a href="pages/deals.html">Deals</a>
+      <a href="pages/new-arrivals.html">New Arrivals</a>
       <a href="pages/categories.html">Categories</a>
       <a href="#products">Shop Items</a>
       <a href="pages/wishlist.html">Wishlist</a>
-      <a href="pages/cart.html">Cart</a>
+      
       <a href="pages/contact.html">Contact</a>
       <a href="pages/terms.html">Terms</a>
     </nav>
   </header>
 
+  <section class="bow-promise" aria-label="Bow Promise">
+    <strong>Bow’s Promise 🦄</strong>
+    <p>If you find the same item Bow is selling for less on Amazon, Bow will match the Amazon price and take an additional 20% off your entire order. Every listing includes an Amazon link so you can compare prices and see how much you’re saving. That’s the Bow Promise.</p>
+  </section>
+
   <section class="hero">
     <div>
       <p class="eyebrow">Bow Service Marketplace</p>
-      <h1>Shop private finds, collectibles, deals, and local sale items.</h1>
-      <p id="storeSubtitle">Browse Bow Service items, view details, save favorites, and build a cart before contacting the seller.</p>
-      <div class="hero-actions"><button class="primary-btn" id="browseMarketplaceBtn" type="button">Browse Marketplace</button><a class="secondary-btn" href="pages/deals.html">Featured Deals</a><a class="secondary-btn" href="pages/new-arrivals.html">See New Arrivals</a></div>
+      <h1>Find it. Love it.<br>Make it yours.</h1>
+      <p id="storeSubtitle">Discover local finds, private sale listings, collectibles, and unique Bow Service marketplace items.</p>
+      <div class="hero-actions"><button class="primary-btn" id="browseMarketplaceBtn" type="button">Browse Marketplace</button><a class="secondary-btn" href="pages/deals.html">Deals</a><a class="secondary-btn" href="pages/new-arrivals.html">See New Arrivals</a></div>
     </div>
     <div class="hero-card">
       <strong>Marketplace Status</strong><p id="sheetStatus">Loading current listings...</p>
-      <div class="mini-stats"><span><b id="statTotal">0</b>Listings</span><span><b id="statAvailable">0</b>Available</span><span><b id="statDeals">0</b>Deals</span></div>
+      <div class="mini-stats">
+        <span><b id="statTotal">0</b>Listings</span>
+        <span><b id="statAvailable">0</b>Available</span>
+        <span><b id="statDeals">0</b>Deals</span>
+      </div>
+      <div class="buyout-stats">
+        <span><small>BUYOUT</small><b id="statBuyout">$0.00</b><em>Total listed price of unsold items</em></span>
+        <span><small>POSSIBLE SAVINGS</small><b id="statSavings">$0.00</b><em>Compared with item values</em></span>
+      </div>
+      <p class="buyout-note" id="buyoutNote" hidden></p>
     </div>
   </section>
 
   <section class="trust-row">
-    <div><strong>Easy Browsing</strong><span>Search, sort, and filter listings fast.</span></div>
-    <div><strong>Item Pages</strong><span>Each listing opens its own detail page.</span></div>
-    <div><strong>Private Cart</strong><span>Build a cart before contacting Bow Service.</span></div>
-    <div><strong>Sold Items Hidden</strong><span>Sold items stay hidden unless you choose to see them.</span></div>
+    <div><strong>Local Finds</strong><span>Discover unique items available through Bow Service.</span></div>
+    <div><strong>Unique Finds</strong><span>Collectibles, useful items, and unexpected treasures.</span></div>
+    <div><strong>Easy Shopping</strong><span>Save favorites and compare Bow prices with Amazon as you browse.</span></div>
+    <div><strong>Marketplace Updates</strong><span>Live inventory keeps current items front and center.</span></div>
   </section>
 
   <main class="layout">
@@ -78,15 +88,11 @@
     </aside>
 
     <section class="content">
-      <section class="deal-strip">
-        <div class="section-title tight"><div><p class="eyebrow">Featured</p><h2>Deals & Highlights</h2></div><div class="mini-action-row"><a class="secondary-btn small-btn" href="pages/deals.html">View all deals</a><a class="secondary-btn small-btn" href="pages/new-arrivals.html">See New Arrivals</a><a class="secondary-btn small-btn" href="pages/categories.html">Select Category</a></div></div>
-        <div id="dealRail" class="deal-rail"></div>
-      </section>
       <div class="section-title" id="products"><div><p class="eyebrow">Marketplace</p><h2>Current Listings</h2></div><div class="view-actions"><button id="gridViewBtn" class="active">Grid</button><button id="listViewBtn">List</button></div></div>
       <div id="loading" class="loading">Loading current listings...</div>
       <div id="productGrid" class="product-grid"></div>
       <div id="emptyState" class="empty-state" hidden><h3>No items found</h3><p>Try clearing filters or searching for something else.</p></div>
-      <section class="info-panels"><div><h3>How it works</h3><p>Browse listings, open item details, add items to your cart, then contact Bow Service.</p></div><div><h3>Availability</h3><p>Only listings marked exactly “sold” are hidden by default. Reserved and other statuses still display.</p></div><div><h3>Sold items</h3><p>Sold item pages can show a Buy on Amazon button when a reference link is available.</p></div></section>
+      <section class="info-panels"><div><h3>How it works</h3><p>Browse listings, compare Bow prices with Amazon, then open the item page for details.</p></div><div><h3>Availability</h3><p>Only listings marked exactly “sold” are hidden by default. Reserved and other statuses still display.</p></div><div><h3>Sold items</h3><p>Sold item pages can show a Buy on Amazon button when a reference link is available.</p></div></section>
     </section>
   </main>
 
@@ -107,5 +113,5 @@
 
   <footer><strong>Bow Service Marketplace</strong><p>Private marketplace listings by Bow Service. Not affiliated with Amazon, eBay, Google, or any outside marketplace.</p></footer>
   <script src="config.js"></script><script src="js/utils.js"></script><script src="js/store.js"></script><script src="js/home.js"></script>
-<script src="js/marketplace-card-enhancer.js"></script></body>
+</body>
 </html>

@@ -7,9 +7,9 @@ window.BowUtils = {
 
   priceText(value) {
     const raw = String(value ?? "").trim();
-    if (!raw) return "Contact for pricing";
+    if (!raw) return "Contact";
     const num = Number(raw.replace(/[^0-9.-]/g, ""));
-    if (!Number.isFinite(num) || num <= 0) return "Contact for pricing";
+    if (!Number.isFinite(num) || num <= 0) return "Contact";
     return new Intl.NumberFormat("en-US", { style: "currency", currency: window.STORE_CONFIG?.currency || "USD" }).format(num);
   },
 

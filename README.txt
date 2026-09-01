@@ -7,7 +7,6 @@ Included pages:
 - pages/wishlist.html
 - pages/cart.html
 - pages/contact.html
-- pages/login.html
 - pages/terms.html
 
 Important behavior:

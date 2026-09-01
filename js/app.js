@@ -200,7 +200,7 @@ function renderDeals() {
     <button class="deal-card" data-open="${U.escape(item.id)}">
       <img src="${U.escape(item.images[0] || window.STORE_CONFIG.defaultImage)}" alt="">
       <span>${U.escape(item.name)}</span>
-      <strong>${U.money(item.salePrice)}</strong>
+      <strong>${U.priceText(item.salePriceRaw)}</strong>
     </button>
   `).join("") : "<p>No deals found yet. Add Discount values in your sheet to feature items here.</p>";
 }
@@ -227,7 +227,7 @@ function cardHtml(item) {
         <h3><button data-open="${U.escape(item.id)}">${U.escape(item.name)}</button></h3>
         <p class="desc">${U.escape(item.description)}</p>
         <div class="price-row">
-          <strong>${U.money(item.salePrice)}</strong>
+          <strong>${U.priceText(item.salePriceRaw)}</strong>
           ${item.discount ? `<span class="discount">${U.escape(item.discount)}</span>` : ""}
         </div>
         <div class="meta">
@@ -275,7 +275,7 @@ function openProduct(id) {
       <div>
         <p class="category">${U.escape(item.category)}</p>
         <h2>${U.escape(item.name)}</h2>
-        <div class="modal-price">${U.money(item.salePrice)}</div>
+        <div class="modal-price">${U.priceText(item.salePriceRaw)}</div>
         <p>${U.escape(item.description)}</p>
         <dl class="detail-list">
           <dt>Item ID</dt><dd>${U.escape(item.itemId || "N/A")}</dd>
@@ -312,7 +312,7 @@ function renderCart() {
         <img src="${U.escape(item.images[0] || window.STORE_CONFIG.defaultImage)}" alt="">
         <div>
           <strong>${U.escape(item.name)}</strong>
-          <span>${line.qty} × ${U.money(item.salePrice)}</span>
+          <span>${line.qty} × ${U.priceText(item.salePriceRaw)}</span>
           <button data-remove-cart="${U.escape(item.id)}">Remove</button>
         </div>
       </div>
@@ -336,7 +336,7 @@ function renderWishlist() {
         <img src="${U.escape(item.images[0] || window.STORE_CONFIG.defaultImage)}" alt="">
         <div>
           <strong>${U.escape(item.name)}</strong>
-          <span>${U.money(item.salePrice)}</span>
+          <span>${U.priceText(item.salePriceRaw)}</span>
           <button data-open="${U.escape(item.id)}">View</button>
         </div>
       </div>
@@ -365,7 +365,7 @@ function setView(view) {
 function buildContactMessage() {
   const lines = S.cart.map(line => {
     const item = S.itemById(line.id);
-    return item ? `${line.qty}x ${item.name} (${item.internalCode || item.itemId}) - ${U.money(item.salePrice)}` : "";
+    return item ? `${line.qty}x ${item.name} (${item.internalCode || item.itemId}) - ${U.priceText(item.salePriceRaw)}` : "";
   }).filter(Boolean);
   const message = encodeURIComponent("Hi, I am interested in these items:\n\n" + lines.join("\n"));
   window.location.href = `mailto:${window.STORE_CONFIG.contact.email || ""}?subject=Private Sales Order Request&body=${message}`;
