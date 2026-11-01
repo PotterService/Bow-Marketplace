@@ -1,23 +1,32 @@
-# Bow Marketplace
+# Bow Service Marketplace (v2)
 
-Bow Marketplace is a public inventory and product showcase platform designed to help customers browse available items, discover new arrivals, view discounts, and submit purchase requests.
+The public inventory site for market.potterservice.com. A plain static site (no build step) that reads
+inventory live from the Google Sheet set in `config.js`.
 
-Features include:
+## Updating inventory
+Edit the Google Sheet. The site picks up changes within about 2 minutes (browsers cache the sheet briefly).
 
-* Public inventory browsing
-* Individual item detail pages
-* New arrivals section
-* Featured deals and discounts
-* Category filtering
-* Search functionality
-* Similar item recommendations
-* Mobile-friendly design
-* Purchase request system
-* Inventory status tracking
-* Image galleries and item information
+## Settings: `config.js`
+- `showAvailability`: **false right now** (warehouse move). Every item is listed with no Available / Sold / On order
+  tags. Set to `true` once inventory is redone to bring back status tags, the sold toggle and the On order tabs.
+- `notice`: the yellow bar at the top of every page. Set to `""` to remove it.
+- `business`: operator name and city/state shown on the home, About and footer.
+- `sheetId` / `sheetName`: which Google Sheet tab to read (must be shared "Anyone with the link can view").
+- `contact`: email / phone / Facebook. **Fill these in.** They power the "Ask about this item" button and the Contact page.
+- `adultCategories`: categories that need an 18+ confirmation.
+- `hiddenCategories`: categories never shown publicly (e.g. `["Store use"]`).
+- `categoryAliases`: fix typos and merge duplicate category names from the sheet.
+- `statusLabels`: how each "Available" value is shown (e.g. "Ordered" shows as "On order").
+- `newArrivalDays`: how recent an item must be to get the "New" badge.
 
-Inventory is updated manually and availability may change before updates are reflected on the public website.
+## Files
+- `index.html`: shop home (hero, top deals, just added, full shop with filters)
+- `pages/`: item, deals, new-arrivals, categories, wishlist, contact, terms
+- `assets/css/site.css`: all styling
+- `assets/js/core.js`: shared code (sheet loading, header/footer, product cards, wishlist, age check)
+- `assets/js/home.js`, `assets/js/pages.js`: page logic
 
-Bow Marketplace serves as the public-facing inventory catalog for Bow's available items and collectibles.
-
-Created by Bow.
+## Sheet columns used
+Item ID, Item Name, Category, Item Value (Amazon price), Description, Sale Price (Bow price), Internal Code,
+Available (Available / Ordered / Processing / Reserved / Sold), Image URLs (comma separated), Amazon Link,
+Date Added, Last Updated, Notes, Discount, and optional On Ebay / Ebay Link / Az.

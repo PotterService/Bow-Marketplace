@@ -1,117 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bow Service Marketplace</title>
-  <link rel="stylesheet" href="css/styles.css" />
-  <link rel="stylesheet" href="css/responsive.css" />
-
-  <style>
-    .bow-promise{margin:18px auto 0;max-width:1240px;padding:18px 22px;border-radius:20px;background:linear-gradient(135deg,#35113e,#6f2b7c);color:#fff;box-shadow:0 12px 30px rgba(53,17,62,.18);}
-    .bow-promise strong{display:block;font-size:1.15rem;margin-bottom:5px;}
-    .bow-promise p{margin:0;line-height:1.55;color:#f7eafa;}
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bow Service Marketplace · Sevierville, Tennessee</title>
+  <meta name="description" content="A local marketplace operated by Bow Service / Potter Service in Sevierville, Tennessee. Hundreds of items, priced below Amazon.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%235b2a6e'/><text x='50' y='70' font-size='62' text-anchor='middle' fill='white' font-family='Georgia,serif' font-weight='700'>B</text></svg>">
+  <link rel="stylesheet" href="assets/css/site.css">
 </head>
-<body>
-  <div id="toast" class="toast" aria-live="polite"></div>
-  <header class="site-header">
-    <div class="header-top">
-      <button class="menu-btn" id="mobileMenuBtn" aria-label="Open menu">☰</button>
-      <a class="brand" href="index.html"><span class="brand-mark">B</span><span><strong id="storeName">Bow Service Marketplace</strong><small>Private Finds • Local Deals • Collectibles</small></span></a>
-      <div class="search-box">
-        <select id="categorySearchSelect"><option value="">All</option></select>
-        <input id="globalSearch" type="search" placeholder="Search Bow Service Marketplace..." />
-        <button id="searchBtn">Search</button>
+<body data-page="home">
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="kicker" id="heroPlace">📍 Sevierville, Tennessee</p>
+          <h1>Great finds.<br><em>Local</em> prices.</h1>
+          <p class="lead" id="heroLead">Bow Service Marketplace is a local marketplace operated by Bow Service / Potter Service in Sevierville, Tennessee. Browse hundreds of items, all priced below Amazon.</p>
+          <form class="hero-search" role="search" id="heroSearch">
+            <input type="search" name="q" placeholder="What are you looking for?" aria-label="Search the marketplace">
+            <button class="btn btn-dark" type="submit">Search</button>
+          </form>
+          <div class="hero-links" id="heroCats"></div>
+        </div>
+        <div class="collage" id="collage" aria-hidden="true">
+          <div class="polaroid p1"></div><div class="polaroid p2"></div><div class="polaroid p3"></div><div class="polaroid p4"></div>
+        </div>
       </div>
-      <div class="header-actions">
-        <a class="header-action link-action" href="pages/wishlist.html">♡ Wishlist</a>
+    </section>
+
+    <!-- MOVING NOTICE -->
+    <section class="wrap">
+      <div class="moving" role="note">
+        <div class="moving-icon" aria-hidden="true">🚚</div>
+        <div>
+          <h2>Heads up: we’re moving to a new warehouse!</h2>
+          <p>Right now Bow doesn’t know exactly what’s in stock and what isn’t, so availability has been removed from the site while inventory is redone. Every item is still listed. Just <a href="pages/contact.html">ask about an item</a> before you buy and Bow will check for you.</p>
+        </div>
       </div>
-    </div>
-    <nav class="nav-bar" id="navBar">
-      <a href="index.html">Home</a>
-      <a href="pages/deals.html">Deals</a>
-      <a href="pages/new-arrivals.html">New Arrivals</a>
-      <a href="pages/categories.html">Categories</a>
-      <a href="#products">Shop Items</a>
-      <a href="pages/wishlist.html">Wishlist</a>
-      
-      <a href="pages/contact.html">Contact</a>
-      <a href="pages/terms.html">Terms</a>
-    </nav>
-  </header>
+    </section>
 
-  <section class="bow-promise" aria-label="Bow Promise">
-    <strong>Bow’s Promise 🦄</strong>
-    <p>If you find the same item Bow is selling for less on Amazon, Bow will match the Amazon price and take an additional 20% off your entire order. Every listing includes an Amazon link so you can compare prices and see how much you’re saving. That’s the Bow Promise.</p>
-  </section>
+    <!-- NUMBERS -->
+    <section class="wrap numbers" aria-live="polite">
+      <div><b id="nItems">–</b><span>items listed</span></div>
+      <div><b id="nCats">–</b><span>categories</span></div>
+      <div><b id="nAvg">–</b><span>average savings vs. Amazon</span></div>
+      <div><b id="nBig">–</b><span>items half off or more</span></div>
+    </section>
 
-  <section class="hero">
-    <div>
-      <p class="eyebrow">Bow Service Marketplace</p>
-      <h1>Find it. Love it.<br>Make it yours.</h1>
-      <p id="storeSubtitle">Discover local finds, private sale listings, collectibles, and unique Bow Service marketplace items.</p>
-      <div class="hero-actions"><button class="primary-btn" id="browseMarketplaceBtn" type="button">Browse Marketplace</button><a class="secondary-btn" href="pages/deals.html">Deals</a><a class="secondary-btn" href="pages/new-arrivals.html">See New Arrivals</a></div>
-    </div>
-    <div class="hero-card">
-      <strong>Marketplace Status</strong><p id="sheetStatus">Loading current listings...</p>
-      <div class="mini-stats">
-        <span><b id="statTotal">0</b>Listings</span>
-        <span><b id="statAvailable">0</b>Available</span>
-        <span><b id="statDeals">0</b>Deals</span>
+    <!-- DEALS -->
+    <section class="wrap block" id="dealsSection">
+      <div class="block-head">
+        <div><p class="kicker">Biggest savings</p><h2>Today’s top deals</h2></div>
+        <a class="more" href="pages/deals.html">All deals <span aria-hidden="true">→</span></a>
       </div>
-      <div class="buyout-stats">
-        <span><small>BUYOUT</small><b id="statBuyout">$0.00</b><em>Total listed price of unsold items</em></span>
-        <span><small>POSSIBLE SAVINGS</small><b id="statSavings">$0.00</b><em>Compared with item values</em></span>
+      <div class="rail" id="dealRail"></div>
+    </section>
+
+    <!-- PROMISE -->
+    <section class="wrap">
+      <div class="promise-band">
+        <div class="promise-seal" aria-hidden="true">🦄</div>
+        <div>
+          <p class="kicker light">The Bow Promise</p>
+          <h2>Find it cheaper on Amazon? We’ll beat it.</h2>
+          <p>If you find the same item for less on Amazon, Bow will match the Amazon price <strong>and</strong> take an extra 20% off your entire order. Every listing links to Amazon so you can compare for yourself.</p>
+        </div>
       </div>
-      <p class="buyout-note" id="buyoutNote" hidden></p>
-    </div>
-  </section>
+    </section>
 
-  <section class="trust-row">
-    <div><strong>Local Finds</strong><span>Discover unique items available through Bow Service.</span></div>
-    <div><strong>Unique Finds</strong><span>Collectibles, useful items, and unexpected treasures.</span></div>
-    <div><strong>Easy Shopping</strong><span>Save favorites and compare Bow prices with Amazon as you browse.</span></div>
-    <div><strong>Marketplace Updates</strong><span>Live inventory keeps current items front and center.</span></div>
-  </section>
+    <!-- NEW -->
+    <section class="wrap block" id="newSection">
+      <div class="block-head">
+        <div><p class="kicker">Fresh in</p><h2>Just added</h2></div>
+        <a class="more" href="pages/new-arrivals.html">All new arrivals <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="rail" id="newRail"></div>
+    </section>
 
-  <main class="layout">
-    <aside class="filters">
-      <div class="filter-head"><h2>Shop Filters</h2><button id="clearFilters">Clear</button></div>
-      <label>Category</label><select id="categoryFilter"><option value="">All categories</option></select>
-      <label class="checkline sold-toggle"><input id="showSoldFilter" type="checkbox" /> See sold items</label>
-      <label>Special filters</label><select id="statusFilter"><option value="">All current listings</option><option value="ebay">Also listed online</option><option value="discount">Discounted</option></select>
-      <label>Sort</label><select id="sortSelect"><option value="nameAsc">Name A-Z</option><option value="priceLow">Price low to high</option><option value="priceHigh">Price high to low</option><option value="newest">Newest first</option><option value="updated">Recently updated</option></select>
-      <label>Max price</label><input id="maxPriceFilter" type="number" min="0" placeholder="No limit" />
-      <label class="checkline"><input id="onlyImagesFilter" type="checkbox" /> Has photo</label>
-      <div class="filter-box"><strong>Tip</strong><p>Sold items are hidden by default. Check “See sold items” if you want to view past listings.</p></div>
-    </aside>
+    <!-- CATEGORIES -->
+    <section class="wrap block">
+      <div class="block-head">
+        <div><p class="kicker">Browse</p><h2>Shop by category</h2></div>
+        <a class="more" href="pages/categories.html">All categories <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="cat-row" id="catRow"></div>
+    </section>
 
-    <section class="content">
-      <div class="section-title" id="products"><div><p class="eyebrow">Marketplace</p><h2>Current Listings</h2></div><div class="view-actions"><button id="gridViewBtn" class="active">Grid</button><button id="listViewBtn">List</button></div></div>
-      <div id="loading" class="loading">Loading current listings...</div>
-      <div id="productGrid" class="product-grid"></div>
-      <div id="emptyState" class="empty-state" hidden><h3>No items found</h3><p>Try clearing filters or searching for something else.</p></div>
-      <section class="info-panels"><div><h3>How it works</h3><p>Browse listings, compare Bow prices with Amazon, then open the item page for details.</p></div><div><h3>Availability</h3><p>Only listings marked exactly “sold” are hidden by default. Reserved and other statuses still display.</p></div><div><h3>Sold items</h3><p>Sold item pages can show a Buy on Amazon button when a reference link is available.</p></div></section>
+    <!-- SHOP -->
+    <section class="wrap block" id="shop">
+      <div class="block-head">
+        <div><p class="kicker">The whole marketplace</p><h2>Shop all items</h2></div>
+      </div>
+      <div class="chips" id="chips" aria-label="Categories"></div>
+      <div class="toolbar">
+        <select id="fSort" aria-label="Sort by">
+          <option value="featured">Sort: Featured</option>
+          <option value="newest">Newest first</option>
+          <option value="discount">Biggest discount</option>
+          <option value="priceLow">Price: low to high</option>
+          <option value="priceHigh">Price: high to low</option>
+          <option value="name">Name A–Z</option>
+        </select>
+        <input id="fMax" type="number" min="0" step="1" placeholder="Max price $" aria-label="Maximum price">
+        <span class="grow"></span>
+        <label class="check"><input type="checkbox" id="fDeals"> Deals only</label>
+        <label class="check"><input type="checkbox" id="fPhoto"> Has photo</label>
+      </div>
+      <div class="result-line"><span id="resultText">Loading items…</span><div class="active-filters" id="activeFilters"></div></div>
+      <div class="grid" id="grid"></div>
+      <div class="load-more"><button class="btn btn-outline" id="loadMore" hidden>Show more</button></div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="wrap block">
+      <div class="block-head"><div><p class="kicker">Simple &amp; local</p><h2>How it works</h2></div></div>
+      <ol class="steps">
+        <li><span class="step-n">1</span><h3>Browse &amp; compare</h3><p>Every item shows Bow’s price next to the Amazon price, with a link so you can check.</p></li>
+        <li><span class="step-n">2</span><h3>Ask about it</h3><p>Message Bow about the item. Bow will confirm it’s on hand (we’re mid-move!) and answer questions.</p></li>
+        <li><span class="step-n">3</span><h3>Get your item</h3><p>Work out pickup, delivery or shipping with Bow, based right here in Sevierville, Tennessee.</p></li>
+      </ol>
     </section>
   </main>
 
-  <div class="modal-backdrop" id="browseChoiceModal" hidden>
-    <div class="browse-choice-modal">
-      <button class="modal-close" id="browseChoiceClose" type="button">×</button>
-      <p class="eyebrow">Browse Marketplace</p>
-      <h2>How would you like to browse?</h2>
-      <p>Choose all current listings or pick a category first.</p>
-      <div class="browse-choice-actions">
-        <button class="primary-btn" id="browseAllItemsBtn" type="button">Browse all items</button>
-        <a class="secondary-btn" href="pages/categories.html">Select a category</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="adultModal" hidden><div class="age-modal"><h2>Age confirmation required</h2><p>This category may contain adult items. Please confirm that you are 18 years of age or older to continue.</p><div class="age-actions"><button id="adultConfirmBtn" class="primary-btn">I am 18 or older</button><button id="adultCancelBtn" class="secondary-btn">Cancel</button></div></div></div>
-
-  <footer><strong>Bow Service Marketplace</strong><p>Private marketplace listings by Bow Service. Not affiliated with Amazon, eBay, Google, or any outside marketplace.</p></footer>
-  <script src="config.js"></script><script src="js/utils.js"></script><script src="js/store.js"></script><script src="js/home.js"></script>
+  <script src="config.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/home.js"></script>
 </body>
 </html>
